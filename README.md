@@ -14,16 +14,26 @@ obras de ficção e boatos.**
 
 ---
 
-## Entidades
+## Índice
+- [Entidades](#entidades)
+	+ [Morgue](#morgue)
+- [Funcionalidades](#funcionalidades)
+	+ [Consultas](#consultas)
+	+ [Cadastro](#cadastro)
+	+ [Edição](#edicao)
+	+ [Deleção](#delecao)
 
-### Morgue
+
+## Entidades <a name="entidades"></a>
+
+### Morgue <a name="morgue"></a>
 
 - Funcionário
 - Falecido
 - Responsável
 - Relatório
 
-## Funcionalidades
+## Funcionalidades <a name="funcionalidades"></a>
 
 Link da API: `http://localhost:8080/evilgemini/entity`
 
@@ -36,7 +46,7 @@ onde `entity` equivale a uma das seguintes opções:
 
 os dados dão retornados no formato [JSON](https://json.org/json-pt.html "JSON").
 
-### Consultas
+### Consultas <a name="consultas"></a>
 
 Para obter todas as ocorrências da base dedos basta acessar fazer uma requisição **GET** pelo link de uma entidades específica, por exemplo:
 
@@ -62,6 +72,11 @@ Retorna:
     }
 ]
 ```
-### Cadastro
+
+### Cadastro <a name="cadastro"></a>
 
 Para adicionar uma nova ocorência na base de dados, basta fazer uma requisião **POST** para a url da entidade escolhida. No corpo http devem conter os dados da nova ocorência (excepto o `id`), caso tenha sucesso na operação, os novos dados serão retornados.
+
+### Edição <a name="edicao"></a>
+
+### Deleção <a name="delecao"></a>
