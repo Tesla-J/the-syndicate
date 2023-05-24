@@ -65,3 +65,5 @@ Retorna:
 ### Cadastro
 
 Para adicionar uma nova ocorência na base de dados, basta fazer uma requisião **POST** para a url da entidade escolhida. No corpo http devem conter os dados da nova ocorência (excepto o `id`), caso tenha sucesso na operação, os novos dados serão retornados.
+
+**Nota:** 
