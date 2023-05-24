@@ -73,10 +73,16 @@ Retorna:
 ]
 ```
 
+Para retornar uma ocorrência específica, basta colocar `/id_da_entidade` no final da url, usando o exemplo acima, para obtermos apenas a segunda ocorrrência basta enviar a requisição para `http://localhost:8080/evilgemini/responsavel/2`
+
 ### Cadastro <a name="cadastro"></a>
 
 Para adicionar uma nova ocorência na base de dados, basta fazer uma requisião **POST** para a url da entidade escolhida. No corpo http devem conter os dados da nova ocorência (excepto o `id`), caso tenha sucesso na operação, os novos dados serão retornados.
 
 ### Edição <a name="edicao"></a>
 
+Para editar uma ocorrência, basta fazer uma requisição **PUT** com os novos dados no corpo http para a url dedicada à entidade desejada. Note que o campo `id` é essencial para o sucesso desta operação.
+
 ### Deleção <a name="delecao"></a>
+
+Para eliminar um ocorrência, basta fazer uma requisição **DELETE** com os dados da entidade no corpo http para a url dedicada à entidade desejada. O campo `id` também é essencial para essa operação.
