@@ -1,4 +1,5 @@
-README.md.backup
+*.backup
+WEB-INF
 HELP.md
 .gradle
 build/

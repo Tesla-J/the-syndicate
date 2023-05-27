@@ -2,7 +2,6 @@ package com.evilgemini.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,39 +12,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.evilgemini.entities.Relatorio;
-import com.evilgemini.entities.Responsavel;
 import com.evilgemini.repositories.RelatorioRepository;
 
 @RestController
 @RequestMapping(value = "/evilgemini")
-public class RelatorioController {
+public class RelatorioController extends Controller<Relatorio, RelatorioRepository>{
 
-	@Autowired
-	private RelatorioRepository repository;
+	private final String ENTITY_MAPPING = "/relatorio";
+	private final String ENTITY_ID_MAPPING = ENTITY_MAPPING + "/{id}";
 	
-	@GetMapping(value = "/relatorio")
-	public List<Relatorio> findAll(){
-		return repository.findAll();
+	@Override
+	@GetMapping(value = ENTITY_MAPPING)
+	protected List<Relatorio> findAll(){
+		return super.findAll();
 	}
 	
-	@GetMapping(value = "/relatorio/{id}")
-	private Relatorio findById(@PathVariable Integer id) {
-		return repository.findById(id).get();
+	@Override
+	@GetMapping(value = ENTITY_ID_MAPPING)
+	protected Relatorio findById(@PathVariable Integer id) {
+		return super.findById(id);
 	}
 	
-	@PostMapping(value = "/relatorio")
-	public Relatorio save(@RequestBody Relatorio relatorio) {
-		return repository.save(relatorio);
+	@Override
+	@PostMapping(value = ENTITY_MAPPING)
+	protected Relatorio save(@RequestBody Relatorio relatorio) {
+		return super.save(relatorio);
 	}
 	
-	@PutMapping (value = "/relatorio")
-	public Relatorio update(@RequestBody Relatorio relatorio) {
-		return repository.save(relatorio);
+	@Override
+	@PutMapping (value = ENTITY_MAPPING)
+	protected Relatorio update(@RequestBody Relatorio relatorio) {
+		return super.update(relatorio);
 	}
 	
-	@DeleteMapping (value = "/relatorio")
-	public Responsavel delete (@RequestBody Relatorio relatorio) {
-		repository.delete(relatorio);
-		return null;
+	@Override
+	@DeleteMapping (value = ENTITY_MAPPING)
+	protected Relatorio delete (@RequestBody Relatorio relatorio) {
+		return super.delete(relatorio);
 	}
 }

@@ -2,7 +2,6 @@ package com.evilgemini.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,33 +16,37 @@ import com.evilgemini.repositories.ResponsavelRepository;
 
 @RestController
 @RequestMapping(value = "/evilgemini")
-public class ResponsavelController {
-	@Autowired
-	ResponsavelRepository repository;
+public class ResponsavelController extends Controller<Responsavel, ResponsavelRepository>{
+	private final String ENTITY_MAPPING = "/responsavel";
+	private final String ENTITY_ID_MAPPING = ENTITY_MAPPING + "/{id}";
 	
-	@GetMapping(value = "/responsavel")
-	private List<Responsavel> findAll(){
-		return repository.findAll();
+	@Override
+	@GetMapping(value = ENTITY_MAPPING)
+	protected List<Responsavel> findAll(){
+		return super.findAll();
 	}
 	
-	@GetMapping(value = "/responsavel/{id}")
-	private Responsavel findById(@PathVariable Integer id) {
-		return repository.findById(id).get();
+	@Override
+	@GetMapping(value = ENTITY_ID_MAPPING)
+	protected Responsavel findById(@PathVariable Integer id) {
+		return super.findById(id);
 	}
 	
-	@PostMapping(value = "/responsavel")
-	public Responsavel save(@RequestBody Responsavel responsavel) {
-		return repository.save(responsavel);
+	@Override
+	@PostMapping(value = ENTITY_MAPPING)
+	protected Responsavel save(@RequestBody Responsavel responsavel) {
+		return super.save(responsavel);
 	}
 	
-	@PutMapping (value = "/responsavel")
-	public Responsavel update(@RequestBody Responsavel responsavel) {
-		return repository.save(responsavel);
+	@Override
+	@PutMapping (value = ENTITY_MAPPING)
+	protected Responsavel update(@RequestBody Responsavel responsavel) {
+		return super.update(responsavel);
 	}
 	
-	@DeleteMapping (value = "/responsavel")
-	public Responsavel delete (@RequestBody Responsavel responsavel) {
-		repository.delete(responsavel);
-		return null;
+	@Override
+	@DeleteMapping (value = ENTITY_MAPPING)
+	protected Responsavel delete (@RequestBody Responsavel responsavel) {
+		return super.delete(responsavel);
 	}
 }

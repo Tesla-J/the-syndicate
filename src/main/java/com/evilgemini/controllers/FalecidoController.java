@@ -2,7 +2,6 @@ package com.evilgemini.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,39 +12,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.evilgemini.entities.Falecido;
-import com.evilgemini.entities.Responsavel;
 import com.evilgemini.repositories.FalecidoRepository;
 
 @RestController
 @RequestMapping(value = "/evilgemini")
-public class FalecidoController {
+public class FalecidoController extends Controller<Falecido, FalecidoRepository>{
 	
-	@Autowired
-	private FalecidoRepository repository;
+	private final String ENTITY_MAPPING = "/falecido";
+	private final String ENTITY_ID_MAPPING = ENTITY_MAPPING + "/{id}";
 	
-	@GetMapping (value = "/falecido")
-	public List<Falecido> findAll(){
-		return repository.findAll();
+	@Override
+	@GetMapping(value = ENTITY_MAPPING)
+	protected List<Falecido> findAll(){
+		return super.findAll();
 	}
 	
-	@GetMapping(value = "/falecido/{id}")
-	private Falecido findById(@PathVariable Integer id) {
-		return repository.findById(id).get();
+	@Override
+	@GetMapping(value = ENTITY_ID_MAPPING)
+	protected Falecido findById(@PathVariable Integer id) {
+		return super.findById(id);
 	}
 	
-	@PostMapping(value = "/falecido")
-	public Falecido save(@RequestBody Falecido falecido) {
-		return repository.save(falecido);
+	@Override
+	@PostMapping(value = ENTITY_MAPPING)
+	protected Falecido save(@RequestBody Falecido falecido) {
+		return super.save(falecido);
 	}
 	
-	@PutMapping (value = "/falecido")
-	public Falecido update(@RequestBody Falecido falecido) {
-		return repository.save(falecido);
+	@Override
+	@PutMapping (value = ENTITY_MAPPING)
+	protected Falecido update(@RequestBody Falecido falecido) {
+		return super.update(falecido);
 	}
 	
-	@DeleteMapping (value = "/falecido")
-	public Responsavel delete (@RequestBody Falecido falecido) {
-		repository.delete(falecido);
-		return null;
+	@Override
+	@DeleteMapping (value = ENTITY_MAPPING)
+	protected Falecido delete (@RequestBody Falecido falecido) {
+		return super.delete(falecido);
 	}
 }
