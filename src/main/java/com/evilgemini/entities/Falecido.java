@@ -25,7 +25,19 @@ public class Falecido {
 	@JoinColumn (name = "responsavel")
 	private Responsavel responsavel;
 	
+	@ManyToOne
+	@JoinColumn (name = "relatorio")
+	private Relatorio relatorio;
+	
 	public Falecido() {}
+	
+	public Relatorio getRelatorio() {
+		return relatorio;
+	}
+
+	public void setRelatorio(Relatorio relatorio) {
+		this.relatorio = relatorio;
+	}
 	
 	public Integer getId() {
 		return id;

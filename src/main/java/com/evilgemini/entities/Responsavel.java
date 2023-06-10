@@ -17,7 +17,16 @@ public class Responsavel {
 	private String bi;
 	private String telefone;
 	private String endereco;
+	private String email;
 	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public Responsavel() {}
 
 	public Integer getId() {

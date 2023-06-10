@@ -27,7 +27,7 @@ public class Funcionario {
 	private String turno;
 	private LocalDate dataContratacao;
 	private String tipoSanguineo;
-	private String Alergias;
+	private String alergias;
 	private String condicaoMedica;
 	
 	public Funcionario() {}
@@ -122,11 +122,11 @@ public class Funcionario {
 	}
 
 	public String getAlergias() {
-		return Alergias;
+		return alergias;
 	}
 
 	public void setAlergias(String alergias) {
-		Alergias = alergias;
+		this.alergias = alergias;
 	}
 
 	public String getCondicaoMedica() {

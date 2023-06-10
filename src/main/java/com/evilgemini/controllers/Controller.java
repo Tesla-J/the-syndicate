@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
 public class Controller<E, R extends JpaRepository<E, Integer>>{
 	
 	@Autowired
@@ -27,7 +26,8 @@ public class Controller<E, R extends JpaRepository<E, Integer>>{
 		return repository.save(entity);
 	}
 	
-	protected E delete (E entity) {
+	protected E delete (Integer id) {
+		E entity = repository.findById(id).get();
 		repository.delete(entity);
 		return null;
 	}

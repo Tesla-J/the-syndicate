@@ -17,15 +17,12 @@ public class Relatorio {
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne
-	@JoinColumn (name = "falecido")
-	private Falecido falecido;
 	private String descricao;
 	
 	@ManyToOne
 	@JoinColumn (name = "funcionario")
 	private Funcionario autor;
-	private LocalDate dataEmissao;
+	private LocalDate dataEmissao;	
 	
 	public Relatorio () {}
 	
@@ -35,12 +32,7 @@ public class Relatorio {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Falecido getFalecido() {
-		return falecido;
-	}
-	public void setFalecido(Falecido falecido) {
-		this.falecido = falecido;
-	}
+
 	public String getDescricao() {
 		return descricao;
 	}

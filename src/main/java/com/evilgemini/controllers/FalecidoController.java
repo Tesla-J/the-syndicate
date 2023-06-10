@@ -2,6 +2,7 @@ package com.evilgemini.controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.evilgemini.entities.Falecido;
 import com.evilgemini.repositories.FalecidoRepository;
 
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/evilgemini")
 public class FalecidoController extends Controller<Falecido, FalecidoRepository>{
@@ -47,7 +49,7 @@ public class FalecidoController extends Controller<Falecido, FalecidoRepository>
 	
 	@Override
 	@DeleteMapping (value = ENTITY_MAPPING)
-	protected Falecido delete (@RequestBody Falecido falecido) {
-		return super.delete(falecido);
+	protected Falecido delete (@RequestBody Integer id) {
+		return super.delete(id);
 	}
 }
