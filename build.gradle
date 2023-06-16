@@ -2,8 +2,8 @@ plugins {
 	id 'java'
 	id 'war'
 	id 'org.springframework.boot' version '3.1.0'
-	id 'io.spring.dependency-management' version '1.1.0'
-	id 'kotlin'
+	id 'io.spring.dependency-management'  version '1.1.0'
+	id 'org.jetbrains.kotlin.jvm' version '1.8.21'//id 'kotlin'
 	id 'eclipse'
 }
 
@@ -23,7 +23,44 @@ dependencies {
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.jetbrains.kotlin:kotlin-stdlib'//:1.8.21'
+	implementation 'jakarta.persistence:jakarta.persistence-api'//:2.2.3'
 }
+
+sourceSets {
+    main {
+        kotlin {
+            kotlin.srcDir "${buildDir}/kotlin"
+        }
+    }
+    /*test {
+        kotlin {
+            srcDirs
+        }
+    }*/
+}
+
+/*compileJava.dependsOn compileKotlin
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '17'
+        freeCompilerArgs += ['-Xjvm-default=all-compatibility']
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '17'
+        freeCompilerArgs += ['-Xjvm-default=all-compatibility']
+    }
+}
+
+/*tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}*/
+
 
 tasks.named('test') {
 	useJUnitPlatform()
