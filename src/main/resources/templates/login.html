@@ -5,22 +5,36 @@
 <title>Login</title>
 </head>
 <body>
+	<p th:if="${LOGIN_ERROR}" style="color: #ff0000">Wrong login</p>
+	<p th:if="${CAPTCHA_ERROR}" style="color: #ff0000">Wrong captcha answer</p>
 	<form
 		method="post"
 		th:action="@{/login}"
+		th:object="${captchaWrapper}"
 		>
 		<input
-			placeholder="Username"
-			name="username"
-			id="username"
+				placeholder="Username"
+				name="username"
+				id="username"
+				required
 			/>
 		<br/>
 		<input
-			placeholder="Password"
-			type="password"
-			name="password"
-			id="password"
+				placeholder="Password"
+				type="password"
+				name="password"
+				id="password"
+				required
 			/>
+		<br/>
+		<img th:src="@{'data:image/png;base64,' + *{captchaImage}}" alt="Captcha"/>
+		<br/>
+		<input
+				type="text"
+				placeholder="Insert Captcha Answer"
+				th:field = "*{userCaptchaAnswer}"
+				required
+		/>
 		<br/>
 		<br/>
 		<input type="submit" value="Login"/>

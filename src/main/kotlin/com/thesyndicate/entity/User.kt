@@ -1,11 +1,7 @@
 package com.thesyndicate.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
-import jakarta.persistence.Id
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Column
+import jakarta.persistence.*
+import org.mindrot.jbcrypt.BCrypt
 
 @Entity
 @Table (name = "Users")
@@ -19,3 +15,6 @@ data class User(
 	@Column(nullable = false, columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	val isEmployee: Boolean = true
 )
+fun encryptPassword(plainText: String): String = BCrypt.hashpw(plainText, BCrypt.gensalt())
+
+fun comparePassword(password: String, hash: String): Boolean = BCrypt.checkpw(password, hash)
