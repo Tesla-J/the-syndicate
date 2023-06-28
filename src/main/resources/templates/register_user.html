@@ -9,7 +9,7 @@
     <br/>
     <h1>Sign up</h1>
     <form th:action="@{/register_user}"
-          th:object="captchaWrapper"
+          th:object="${captchaWrapper}"
           method="post"
     >
         <input
@@ -21,7 +21,7 @@
         <br/>
         <input
             id="pass"
-            name="pass1"
+            name="pass"
             placeholder="Password"
             type="password"
             required
