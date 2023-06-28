@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>User sign up</title>
+</head>
+<body>
+	<p th:if="${SIGNUP_ERROR}" style="color: #ff0000">Could not complete opera</p>
+    <br/>
+    <h1>Sign up</h1>
+    <form th:action="@{/register_user}"
+          th:object="captchaWrapper"
+          method="post"
+    >
+        <input
+            id="username"
+            name="username"
+            placeholder="Username"
+            required
+        />
+        <br/>
+        <input
+            id="pass"
+            name="pass1"
+            placeholder="Password"
+            type="password"
+            required
+        />
+        <br/>
+        <input
+            id="cpass"
+            name="cpass"
+            placeholder="Confirm password"
+            type="password"
+            required
+        />
+        <br/>
+        <img th:src="@{'data:image/png;base64,' + *{captchaImage}}" alt="Captcha"/>
+        <br/>
+        <input
+            th:field="*{userCaptchaAnswer}"
+            required
+            placeholder="Insert captcha answer"
+        />
+        <br/><br/>
+        <input
+            type="submit"
+            value="Confirm"
+        />
+        <input
+            type="reset"
+            value="Clear"
+        />
+    </form>
+</body>
+</html>

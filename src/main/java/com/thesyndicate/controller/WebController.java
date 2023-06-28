@@ -2,10 +2,7 @@ package com.thesyndicate.controller;
 
 import java.util.Objects;
 
-import cn.apiclub.captcha.Captcha;
-
-import com.thesyndicate.entity.UserKt;
-import com.thesyndicate.util.CaptchaManagerKt;
+import com.thesyndicate.util.CaptchaWrapperKt;
 
 import com.thesyndicate.util.CaptchaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +73,7 @@ public class WebController {
 		StringBuilder suffix = new StringBuilder();
 
 		// Verification
-		if(CaptchaManagerKt.verifyCaptcha(this.captchaWrapper.getCaptchaInstance(), captchaWrapper.getUserCaptchaAnswer())){
+		if(CaptchaWrapperKt.verifyCaptcha(this.captchaWrapper.getCaptchaInstance(), captchaWrapper.getUserCaptchaAnswer())){
 			var user = userController.authenticate(username, password);
 			//System.err.println(UserKt.encryptPassword("root"));
 			if (Objects.isNull(user)) {
