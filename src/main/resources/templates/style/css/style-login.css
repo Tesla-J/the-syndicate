@@ -5,14 +5,14 @@ html {
     margin:0;
     padding:0;
     font-family: sans-serif;
-    background: linear-gradient(#141e30, #390879);
+    background: linear-gradient(rgb(75, 63, 248), #3a1c64);
   }
 
   .login-box {
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 400px;
+      width: 350px;
       padding: 40px;
       transform: translate(-50%, -50%);
       background: rgba(0,0,0,.5);
@@ -20,6 +20,7 @@ html {
       box-shadow: 0 15px 25px rgba(0,0,0,.6);
       border-radius: 7px;
     }
+
     .login-box h2 {
         margin: 0 0 30px;
         padding: 0;
@@ -41,9 +42,13 @@ html {
 
     .login-box input[type="submit"]{
       border-bottom: none;
-      background: #390879;
+      background: #550cb4;
       padding: 10px 5px 10px 5px;
-      width: 40%;
+      border-radius: 20px;
+    }
+
+    .login-box input[type="submit"]:hover{
+      background-color: rgb(22, 6, 253);
     }
 
 
