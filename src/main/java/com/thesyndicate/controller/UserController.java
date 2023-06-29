@@ -3,8 +3,6 @@ package com.thesyndicate.controller;
 import com.thesyndicate.entity.User;
 import com.thesyndicate.entity.UserKt;
 
-import com.thesyndicate.util.CaptchaManagerKt;
-
 import com.thesyndicate.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -47,6 +45,20 @@ public class UserController {
 		}
 		catch (EmptyResultDataAccessException e){
 			return null;
+		}
+	}
+
+	/**
+	 * virifies if a username exists in the database
+	 * @param username the username to search in the database
+	 * @return true if found and false otherwise
+	 */
+	public boolean exists(String username){
+		try{
+			return repository.findByUsername(username) != null;
+		}
+		catch(EmptyResultDataAccessException e){
+			return false; //object does not exist
 		}
 	}
 }

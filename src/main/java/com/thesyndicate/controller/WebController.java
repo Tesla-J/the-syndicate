@@ -23,13 +23,16 @@ public class WebController {
 	private final String LOGIN_SUCCESS = "LOGIN_SUCCESS";
 	private final String LOGIN_SUCCESS_PARAM = "login_success";
 	private final String SIGNUP_ERROR = "SIGNUP_ERROR";
+	private final String SIGNUP_ERROR_PARAM = "signup_error";
 	private final String CAPTCHA_WRAPPER = "captchaWrapper";
 	private final String SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 	private final String SIGNUP_SUCCESS_PARAM = "signup_success";
+	private final String PASSWORD_MISMATCH_ERROR = "PASSWORD_MISMATCH_ERROR";
+	private final String PASSWORD_MISMATCH_ERROR_PARAM = "password_mismach";
 
 	@Autowired
 	private UserController userController;
-	private CaptchaWrapper captchaWrapper;
+	private final CaptchaWrapper captchaWrapper;
 
 	public WebController(){
 		this.captchaWrapper = new CaptchaWrapper();
@@ -76,7 +79,7 @@ public class WebController {
 	@PostMapping(value = "/login")
 	public RedirectView login(String username,
 							  String password,
-							  @ModelAttribute("captchaWrapper") CaptchaWrapper captchaWrapper,
+							  @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper,
 							  Model model) {
 
 		StringBuilder suffix = new StringBuilder();
@@ -100,11 +103,21 @@ public class WebController {
 		return new RedirectView("/login" + suffix.toString());
 	}
 
+	/**
+	 * sign up for black market users
+	 * @param signUpError a flag to verify if the registration process returned a error
+	 * @param model
+	 * @return
+	 */
 	@GetMapping(value = "/register_user")
-	public String registerUser(@RequestParam(required = false) boolean signUpError,
+	public String registerUser(@RequestParam(value = SIGNUP_ERROR_PARAM, required = false) boolean signUpError,
+							   @RequestParam(value = CAPTCHA_ERROR_PARAM, required = false) boolean captchaError,
+							   @RequestParam(value = PASSWORD_MISMATCH_ERROR_PARAM, required = false) boolean passwordMismatchError,
 							   Model model){
-		if(signUpError)
-			model.addAttribute(SIGNUP_ERROR, true);
+		if(captchaError) model.addAttribute(CAPTCHA_ERROR, captchaError);
+		else if(signUpError) model.addAttribute(SIGNUP_ERROR, signUpError);
+		else if(passwordMismatchError) model.addAttribute(PASSWORD_MISMATCH_ERROR, passwordMismatchError);
+
 		model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
 
 		return "register_user";
@@ -115,7 +128,14 @@ public class WebController {
 							   @RequestParam String username,
 							   @RequestParam String pass,
 							   @RequestParam String cpass,
-							   @ModelAttribute String captchaWrapper){
+							   @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper){
+
+		if(!CaptchaWrapperKt.verifyCaptcha(this.captchaWrapper.getCaptchaInstance(), captchaWrapper.getUserCaptchaAnswer()))
+			return "redirect:/register_user?" + CAPTCHA_ERROR_PARAM + "=true";
+		else if(userController.exists(username))
+			return "redirect:/register_user?" + SIGNUP_ERROR_PARAM + "=true";
+		else if(!pass.equals(cpass))
+			return "redirect:/register_user?" + PASSWORD_MISMATCH_ERROR_PARAM + "=true";
 
 		return "redirect:/login?" + SIGNUP_SUCCESS_PARAM + "=true";
 	}
