@@ -2,6 +2,8 @@ package com.thesyndicate.controller;
 
 import java.util.Objects;
 
+import com.thesyndicate.entity.User;
+import com.thesyndicate.entity.UserKt;
 import com.thesyndicate.util.CaptchaWrapperKt;
 
 import com.thesyndicate.util.CaptchaWrapper;
@@ -136,6 +138,9 @@ public class WebController {
 			return "redirect:/register_user?" + SIGNUP_ERROR_PARAM + "=true";
 		else if(!pass.equals(cpass))
 			return "redirect:/register_user?" + PASSWORD_MISMATCH_ERROR_PARAM + "=true";
+
+		var newUser = new User(null, username, UserKt.encryptPassword(pass), false);
+		userController.save(newUser);
 
 		return "redirect:/login?" + SIGNUP_SUCCESS_PARAM + "=true";
 	}

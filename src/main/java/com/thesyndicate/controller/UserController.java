@@ -61,4 +61,8 @@ public class UserController {
 			return false; //object does not exist
 		}
 	}
+
+	public void save(User newUser){
+		repository.save(newUser);
+	}
 }
