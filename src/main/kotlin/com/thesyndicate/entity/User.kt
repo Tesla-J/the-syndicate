@@ -8,12 +8,12 @@ import org.mindrot.jbcrypt.BCrypt
 data class User(
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	val id: Long,
+	val id: Long?,
 	@Column (unique = true)
 	val username: String,
 	val password: String,
 	@Column(nullable = false, columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	val isEmployee: Boolean = true
+	val isEmployee: Boolean? = true
 )
 fun encryptPassword(plainText: String): String = BCrypt.hashpw(plainText, BCrypt.gensalt())
 

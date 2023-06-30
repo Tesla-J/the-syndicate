@@ -2,10 +2,9 @@ package com.thesyndicate.controller;
 
 import java.util.Objects;
 
-import cn.apiclub.captcha.Captcha;
-
+import com.thesyndicate.entity.User;
 import com.thesyndicate.entity.UserKt;
-import com.thesyndicate.util.CaptchaManagerKt;
+import com.thesyndicate.util.CaptchaWrapperKt;
 
 import com.thesyndicate.util.CaptchaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +19,26 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class WebController {
 	private final String LOGIN_ERROR = "LOGIN_ERROR";
+	private final String LOGIN_ERROR_PARAM = "login_error";
 	private final String CAPTCHA_ERROR = "CAPTCHA_ERROR";
+	private final String CAPTCHA_ERROR_PARAM = "captcha_error";
 	private final String LOGIN_SUCCESS = "LOGIN_SUCCESS";
+	private final String LOGIN_SUCCESS_PARAM = "login_success";
+	private final String SIGNUP_ERROR = "SIGNUP_ERROR";
+	private final String SIGNUP_ERROR_PARAM = "signup_error";
+	private final String CAPTCHA_WRAPPER = "captchaWrapper";
+	private final String SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
+	private final String SIGNUP_SUCCESS_PARAM = "signup_success";
+	private final String PASSWORD_MISMATCH_ERROR = "PASSWORD_MISMATCH_ERROR";
+	private final String PASSWORD_MISMATCH_ERROR_PARAM = "password_mismach";
 
 	@Autowired
 	private UserController userController;
-	private CaptchaWrapper captchaWrapper;
+	private final CaptchaWrapper captchaWrapper;
+
+	public WebController(){
+		this.captchaWrapper = new CaptchaWrapper();
+	}
 
 	@GetMapping(value = {"/", "index", "home"})
 	public String index() {
@@ -38,21 +51,20 @@ public class WebController {
 	 * @return
 	 */
 	@GetMapping(value = "/login")
-	public String login(
-			Model model,
-			@RequestParam(value = "loginError", required = false) boolean loginError,
-			@RequestParam(value = "captchaError", required = false) boolean captchaError,
-			@RequestParam(value = "loginSuccess", required = false) boolean loginSuccess
-			) {
+	public String login(Model model,
+						@RequestParam(value = LOGIN_ERROR_PARAM, required = false) boolean loginError,
+						@RequestParam(value = CAPTCHA_ERROR_PARAM, required = false) boolean captchaError,
+						@RequestParam(value = LOGIN_SUCCESS_PARAM, required = false) boolean loginSuccess,
+						@RequestParam(value = SIGNUP_SUCCESS_PARAM, required = false) boolean signUpSuccess) {
 
 		model.addAttribute(LOGIN_ERROR, loginError);
 		model.addAttribute(CAPTCHA_ERROR, captchaError);
+		model.addAttribute(SIGNUP_SUCCESS, signUpSuccess);
 
-		this.captchaWrapper = new CaptchaWrapper();
-		model.addAttribute("captchaWrapper", this.captchaWrapper);
+		model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
 
 		//log
-		System.out.println("loginSuccess="+loginSuccess);
+		System.out.println(LOGIN_SUCCESS_PARAM + " : " + loginSuccess);
 
 		if(loginSuccess) return "redirect:/home";
 		return "login";
@@ -67,21 +79,20 @@ public class WebController {
 	 * @return RedirectView object that redirects to the login page (GET request)
 	 */
 	@PostMapping(value = "/login")
-	public RedirectView login(
-			String username,
-			String password,
-			@ModelAttribute("captchaWrapper") CaptchaWrapper captchaWrapper,
-			Model model) {
+	public RedirectView login(String username,
+							  String password,
+							  @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper,
+							  Model model) {
 
 		StringBuilder suffix = new StringBuilder();
 
 		// Verification
-		if(CaptchaManagerKt.verifyCaptcha(this.captchaWrapper.getCaptchaInstance(), captchaWrapper.getUserCaptchaAnswer())){
+		if(CaptchaWrapperKt.verifyCaptcha(this.captchaWrapper.getCaptchaInstance(), captchaWrapper.getUserCaptchaAnswer())){
 			var user = userController.authenticate(username, password);
 			//System.err.println(UserKt.encryptPassword("root"));
 			if (Objects.isNull(user)) {
 				System.out.println("Login failed");
-				suffix.append("?loginError=true");//model.addAttribute(LOGIN_ERROR, true);
+				suffix.append("?" + LOGIN_ERROR_PARAM + "=true");//model.addAttribute(LOGIN_ERROR, true);
 			}
 			else {
 				System.out.println("Welcome");
@@ -89,8 +100,48 @@ public class WebController {
 				model.addAttribute(LOGIN_SUCCESS, true);
 			}
 		}else{
-			suffix.append(suffix.toString().length() > 0 ? "&captchaError=true": "?captchaError=true");//model.addAttribute(CAPTCHA_ERROR, true);
+			suffix.append(suffix.toString().length() > 0 ? "&" + CAPTCHA_ERROR_PARAM + "=true": "?" + CAPTCHA_ERROR_PARAM + "=true");//model.addAttribute(CAPTCHA_ERROR, true);
 		}
 		return new RedirectView("/login" + suffix.toString());
+	}
+
+	/**
+	 * sign up for black market users
+	 * @param signUpError a flag to verify if the registration process returned a error
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/register_user")
+	public String registerUser(@RequestParam(value = SIGNUP_ERROR_PARAM, required = false) boolean signUpError,
+							   @RequestParam(value = CAPTCHA_ERROR_PARAM, required = false) boolean captchaError,
+							   @RequestParam(value = PASSWORD_MISMATCH_ERROR_PARAM, required = false) boolean passwordMismatchError,
+							   Model model){
+		if(captchaError) model.addAttribute(CAPTCHA_ERROR, captchaError);
+		else if(signUpError) model.addAttribute(SIGNUP_ERROR, signUpError);
+		else if(passwordMismatchError) model.addAttribute(PASSWORD_MISMATCH_ERROR, passwordMismatchError);
+
+		model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+
+		return "register_user";
+	}
+
+	@PostMapping(value = "/register_user")
+	public String registerUser(Model model,
+							   @RequestParam String username,
+							   @RequestParam String pass,
+							   @RequestParam String cpass,
+							   @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper){
+
+		if(!CaptchaWrapperKt.verifyCaptcha(this.captchaWrapper.getCaptchaInstance(), captchaWrapper.getUserCaptchaAnswer()))
+			return "redirect:/register_user?" + CAPTCHA_ERROR_PARAM + "=true";
+		else if(userController.exists(username))
+			return "redirect:/register_user?" + SIGNUP_ERROR_PARAM + "=true";
+		else if(!pass.equals(cpass))
+			return "redirect:/register_user?" + PASSWORD_MISMATCH_ERROR_PARAM + "=true";
+
+		var newUser = new User(null, username, UserKt.encryptPassword(pass), false);
+		userController.save(newUser);
+
+		return "redirect:/login?" + SIGNUP_SUCCESS_PARAM + "=true";
 	}
 }
