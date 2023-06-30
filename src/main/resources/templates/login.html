@@ -2,17 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="style/css/style-login.css">
 <title>Login</title>
 </head>
 <body>
+  <div class="login-box">
 	<p th:if="${LOGIN_ERROR}" style="color: #ff0000">Wrong login</p>
 	<p th:if="${CAPTCHA_ERROR}" style="color: #ff0000">Wrong captcha answer</p>
-	<p th:if="${SIGNUP_SUCCESS}" style="color: #00ff00">Account created, log in to continue</p>
+  	<p th:if="${SIGNUP_SUCCESS}" style="color: #00ff00">Account created, log in to continue</p>
+	   
+	<h2>LOGIN</h2>
 	<form
 		method="post"
 		th:action="@{/login}"
 		th:object="${captchaWrapper}"
 		>
+
 		<input
 				placeholder="Username"
 				name="username"
@@ -40,5 +45,6 @@
 		<br/>
 		<input type="submit" value="Login"/>
 	</form>
+   </div>
 </body>
 </html>
