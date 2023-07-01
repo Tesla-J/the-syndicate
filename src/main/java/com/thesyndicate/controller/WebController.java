@@ -41,8 +41,13 @@ public class WebController {
 		this.captchaWrapper = new CaptchaWrapper();
 	}
 
+	/**
+	 * homepate
+	 * @return return the homepage
+	 */
 	@GetMapping(value = {"/", "index", "home"})
-	public String index() {
+	public String index(Model model, HttpSession httpSession) {
+		model.addAttribute("user", httpSession.getAttribute("user"));
 		return "index";
 	}
 

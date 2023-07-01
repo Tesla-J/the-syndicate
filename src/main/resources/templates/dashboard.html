@@ -6,6 +6,9 @@
 </head>
 <body>
   <h1>Dashboard</h1>
+  <a th:href="@{/home}">
+      <img src="" alt="Logo"/>
+  </a>
   <div th:object="${user}">
       <p th:text="*{username}"></p>
   </div>

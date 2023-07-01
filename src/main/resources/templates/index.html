@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Index - The Syndicate</title>
 </head>
 <body>
 	<h1>The syndicate</h1>
-	<a href="login">Login</a>
+	<a th:if="${user != null}" th:href="@{/dashboard}">dashboard</a>
+	<a th:if="${user == null}" href="login">Login</a>
 </body>
 </html>
