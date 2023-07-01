@@ -7,6 +7,7 @@ import com.thesyndicate.entity.UserKt;
 import com.thesyndicate.util.CaptchaWrapperKt;
 
 import com.thesyndicate.util.CaptchaWrapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,10 +53,15 @@ public class WebController {
 	 */
 	@GetMapping(value = "/login")
 	public String login(Model model,
+						HttpSession httpSession,
 						@RequestParam(value = LOGIN_ERROR_PARAM, required = false) boolean loginError,
 						@RequestParam(value = CAPTCHA_ERROR_PARAM, required = false) boolean captchaError,
 						@RequestParam(value = LOGIN_SUCCESS_PARAM, required = false) boolean loginSuccess,
 						@RequestParam(value = SIGNUP_SUCCESS_PARAM, required = false) boolean signUpSuccess) {
+
+		// redirect if is already logged in
+		if(httpSession.getAttribute("user") != null)
+			return "redirect:/dashboard";
 
 		model.addAttribute(LOGIN_ERROR, loginError);
 		model.addAttribute(CAPTCHA_ERROR, captchaError);
@@ -66,7 +72,9 @@ public class WebController {
 		//log
 		System.out.println(LOGIN_SUCCESS_PARAM + " : " + loginSuccess);
 
-		if(loginSuccess) return "redirect:/home";
+		if(loginSuccess) {
+			return "redirect:/dashboard";
+		}
 		return "login";
 	}
 
@@ -82,7 +90,10 @@ public class WebController {
 	public RedirectView login(String username,
 							  String password,
 							  @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper,
-							  Model model) {
+							  Model model,
+							  HttpSession httpSession) {
+
+		if(httpSession.getAttribute("user") != null) new RedirectView("/dashboard");
 
 		StringBuilder suffix = new StringBuilder();
 
@@ -95,9 +106,11 @@ public class WebController {
 				suffix.append("?" + LOGIN_ERROR_PARAM + "=true");//model.addAttribute(LOGIN_ERROR, true);
 			}
 			else {
-				System.out.println("Welcome");
+				System.out.println("Welcome"); //log
 				suffix.append("?loginSuccess=true");
 				model.addAttribute(LOGIN_SUCCESS, true);
+
+				httpSession.setAttribute("user", user); //start user session
 			}
 		}else{
 			suffix.append(suffix.toString().length() > 0 ? "&" + CAPTCHA_ERROR_PARAM + "=true": "?" + CAPTCHA_ERROR_PARAM + "=true");//model.addAttribute(CAPTCHA_ERROR, true);
@@ -109,13 +122,17 @@ public class WebController {
 	 * sign up for black market users
 	 * @param signUpError a flag to verify if the registration process returned a error
 	 * @param model
-	 * @return
+	 * @return redirects to the defined template
 	 */
 	@GetMapping(value = "/register_user")
 	public String registerUser(@RequestParam(value = SIGNUP_ERROR_PARAM, required = false) boolean signUpError,
 							   @RequestParam(value = CAPTCHA_ERROR_PARAM, required = false) boolean captchaError,
 							   @RequestParam(value = PASSWORD_MISMATCH_ERROR_PARAM, required = false) boolean passwordMismatchError,
-							   Model model){
+							   Model model,
+							   HttpSession httpSession){
+		//if is logged in
+		if(httpSession.getAttribute("user") != null) return "redirect:/dashboard";
+
 		if(captchaError) model.addAttribute(CAPTCHA_ERROR, captchaError);
 		else if(signUpError) model.addAttribute(SIGNUP_ERROR, signUpError);
 		else if(passwordMismatchError) model.addAttribute(PASSWORD_MISMATCH_ERROR, passwordMismatchError);
@@ -143,5 +160,20 @@ public class WebController {
 		userController.save(newUser);
 
 		return "redirect:/login?" + SIGNUP_SUCCESS_PARAM + "=true";
+	}
+
+	@GetMapping(value = "/dashboard")
+	public String dashboard(Model model, HttpSession httpSession){
+		if(httpSession.getAttribute("user") == null) return "redirect:/login";
+
+		model.addAttribute("user", httpSession.getAttribute("user"));
+
+		return "/dashboard";
+	}
+
+	@GetMapping(value = "/dashboard/logout")
+	public String logout(Model model, HttpSession httpSession){
+		httpSession.invalidate();
+		return "redirect:/home";
 	}
 }

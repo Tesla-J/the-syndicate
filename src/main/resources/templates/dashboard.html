@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+  <h1>Dashboard</h1>
+  <div th:object="${user}">
+      <p th:text="*{username}"></p>
+  </div>
+  <a th:href="@{/dashboard/logout}">Logout</a>
+</body>
+</html>
