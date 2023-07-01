@@ -11,6 +11,7 @@ data class User(
 	val id: Long?,
 	@Column (unique = true)
 	val username: String,
+	@Column (nullable = false)
 	val password: String,
 	@Column(nullable = false, columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	val isEmployee: Boolean? = true
