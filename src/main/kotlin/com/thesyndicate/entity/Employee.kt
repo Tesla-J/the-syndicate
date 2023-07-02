@@ -1,25 +1,30 @@
 package com.thesyndicate.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.time.LocalDate
 
-data class Employee(
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    val id: Int?,
-    @Column(nullable = false)
-    val name: String,
-    @Column(nullable = false)
-    val bi: String,
-    @Column(nullable = false, unique = true)
-    val phoneNumber: String,
-    @Column(nullable = false)
-    val email: String,
-    @Column(nullable = false)
-    val birthDate: LocalDate,
-    @Column(nullable = false)
-    val userId: User
-)
+@Entity
+@Table(name = "Employees")
+data class Employee(@Id
+                    @GeneratedValue (strategy = GenerationType.IDENTITY)
+                    val id: Long?,
+
+                    @Column(nullable = false, unique = true)
+                    val name: String,
+
+                    @Column(nullable = false, unique = true)
+                    val bi: String,
+
+                    @Column(nullable = false, unique = true)
+                    val phoneNumber: String,
+
+                    @Column(nullable = false, unique = true)
+                    val email: String,
+
+                    @Column(nullable = false)
+                    val birthDate: LocalDate,
+
+                    @Column(unique = true)
+                    @ManyToOne
+                    @JoinColumn(name = "userId", referencedColumnName = "id")
+                    val userId: User?)

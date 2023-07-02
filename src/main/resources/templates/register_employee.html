@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Employee</title>
+</head>
+<body>
+  <h1>Register employee</h1>
+  <form
+    method = "post"
+    th:action="@{/dashboard/register_employee}"
+    th:object="${captchaWrapper}"
+  >
+    <input
+        name = "name"
+        id = "name"
+        placeholder="Full name"
+        required
+    />
+    <br/>
+    <input
+        name = "bi"
+        id = "bi"
+        maxlength="14"
+        minlength="14"
+        placeholder="BI"
+        required
+    />
+    <br/>
+    <input
+        name = "phoneNumber"
+        id = "phoneNumber"
+        type = "tel"
+        minlength="9"
+        maxlength="13"
+        placeholder="Phone number"
+        required
+    />
+    <br/>
+    <input
+        name = "email"
+        id = "email"
+        type = "email"
+        placeholder="E-mail"
+        required
+    />
+    <br/>
+    <label for="birthDate">Birth Date</label>
+    <input
+        name = "birthDate"
+        id = "birthDate"
+        type = "date"
+        placeholder="Birth Date"
+    />
+    <br/>
+    <input
+            id="username"
+            name="username"
+            placeholder="Username"
+            required
+    />
+    <br/>
+    <input
+            id="pass"
+            name="pass"
+            placeholder="Password"
+            type="password"
+            required
+    />
+    <br/>
+    <input
+            id="cpass"
+            name="cpass"
+            placeholder="Confirm password"
+            type="password"
+            required
+    />
+    <br/>
+    <img th:src="@{'data:image/png;base64,' + *{captchaImage}}" alt="Captcha"/>
+    <br/>
+    <input
+            th:field="*{userCaptchaAnswer}"
+            required
+            placeholder="Insert captcha answer"
+    />
+    <br/><br/>
+    <input
+            type="submit"
+            value="Confirm"
+    />
+    <input
+            type="reset"
+            value="Clear"
+    />
+  </form>
+</body>
+</html>

@@ -181,4 +181,21 @@ public class WebController {
 		httpSession.invalidate();
 		return "redirect:/home";
 	}
+
+	@GetMapping(value = "/dashboard/register_employee")
+	public String registerEmployee(Model model, HttpSession httpSession){
+		User user = (User) httpSession.getAttribute("user");
+		if(user == null || !user.getUsername().equals("root"))
+			return "redirect:/login";
+
+		model.addAttribute("users", userController.getAll());
+		model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+
+		return "register_employee";
+	}
+
+	@PostMapping(value = "/dashboard/register_employee")
+	public String registerEmployee(Model model){
+		return "redirect:/dashboard/register_employee";
+	}
 }

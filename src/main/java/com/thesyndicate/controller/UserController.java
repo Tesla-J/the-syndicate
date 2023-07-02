@@ -24,7 +24,7 @@ public class UserController {
 	 *
 	 * @return all users in the database
 	 */
-	public List<User> findAll() {
+	public List<User> getAll() {
 		return repository.findAll();
 	}
 
