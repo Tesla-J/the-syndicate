@@ -2,9 +2,7 @@ package com.thesyndicate.controller;
 
 import java.util.Objects;
 
-import com.thesyndicate.entity.Employee;
-import com.thesyndicate.entity.User;
-import com.thesyndicate.entity.UserKt;
+import com.thesyndicate.entity.*;
 import com.thesyndicate.util.CaptchaWrapperKt;
 
 import com.thesyndicate.util.CaptchaWrapper;
@@ -50,6 +48,10 @@ public class WebController {
 	private UserController userController;
 	@Autowired
 	private EmployeeController employeeController;
+	@Autowired
+	private RelatoryController relatoryController;
+	@Autowired
+	private CorpseController corpseController;
 	private final CaptchaWrapper captchaWrapper; //maiusculate
 
 	public WebController(){
@@ -84,6 +86,17 @@ public class WebController {
 	private void setSuccessMessage(String successMessage){
 		this.successFlag = true;
 		this.successMessage = successMessage;
+	}
+
+	/**
+	 * define the flags to show the error and success messages
+	 * @param model the model object where the flags will be set
+	 */
+	private void setFlags(Model model){
+		model.addAttribute(ERROR_FLAG, this.errorFlag);
+		model.addAttribute(ERROR_MESSAGE, this.errorMessage);
+		model.addAttribute(SUCCESS_FLAG, this.successFlag);
+		model.addAttribute(SUCCESS_MESSAGE, this.successMessage);
 	}
 
 	/**
@@ -159,6 +172,10 @@ public class WebController {
 				model.addAttribute(LOGIN_SUCCESS, true);
 
 				httpSession.setAttribute("user", user); //start user session
+				if(user.isEmployee()){
+					var employee = employeeController.findByUserId(user);
+					httpSession.setAttribute("employee", employee);
+				}
 			}
 		}else{
 			suffix.append(suffix.toString().length() > 0 ? "&" + CAPTCHA_ERROR_PARAM + "=true": "?" + CAPTCHA_ERROR_PARAM + "=true");//model.addAttribute(CAPTCHA_ERROR, true);
@@ -234,10 +251,7 @@ public class WebController {
 
 		model.addAttribute("user", user);
 		// set flags and messages
-		model.addAttribute(ERROR_FLAG, this.errorFlag);
-		model.addAttribute(ERROR_MESSAGE, this.errorMessage);
-		model.addAttribute(SUCCESS_FLAG, this.successFlag);
-		model.addAttribute(SUCCESS_MESSAGE, this.successMessage);
+		setFlags(model);
 
 		var newEmployee = new Employee();
 		model.addAttribute("newEmployee", newEmployee);
@@ -297,15 +311,42 @@ public class WebController {
 		if(user == null || !user.isEmployee())
 			return "redirect:/dashboard";
 
+		setFlags(model);
+
 		model.addAttribute("user", user);
 		//add employee info if is an employee TODO
+		model.addAttribute("newCorpse", new Corpses());
+		model.addAttribute("newRelatory", new Relatories());
+		model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
 
 		resetFlags();
 		return "write_relatory";
 	}
 
-	@PostMapping(value = "/dashboard/write_reatory")
-	public String writeRelatory(Model model){
+	@PostMapping(value = "/dashboard/write_relatory")
+	public String writeRelatory(Model model,
+								HttpSession httpSession,
+								@ModelAttribute("newCorpse") Corpses tmpCorpse,
+								@ModelAttribute("newRelatory") Relatories tmpRelatories,
+								@ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper){
+		if(!CaptchaWrapperKt.verifyCaptcha(this.captchaWrapper.getCaptchaInstance(), captchaWrapper.getUserCaptchaAnswer())){
+			setErrorMessage("Wrong captcha answer");
+			return "redirect:/dashboard/write_relatory";
+		}
+
+		var newRelatory = new Relatories(null,
+										tmpRelatories.getTitle(),
+										tmpRelatories.getContent(),
+										(Employee) httpSession.getAttribute("employee"));
+		relatoryController.save(newRelatory);
+		var birthDate = tmpCorpse.getBirthDate().length() > 0 ? tmpCorpse.getBirthDate() : null;
+		var newCorpse = new Corpses(null,
+									tmpCorpse.getName(),
+									tmpCorpse.getBi(),
+									birthDate,
+									tmpCorpse.getDeceaseDate(),
+									newRelatory);
+		corpseController.save(newCorpse);
 
 		setSuccessMessage("Relatory successfully submitted");
 		return "redirect:/dashboard/write_relatory";

@@ -16,4 +16,4 @@ data class Relatories(@Id
 
                       @ManyToOne
                       @JoinColumn(name = "idAuthor", referencedColumnName = "id")
-                      val idAuthor: Employee)
+                      val idAuthor: Employee?)

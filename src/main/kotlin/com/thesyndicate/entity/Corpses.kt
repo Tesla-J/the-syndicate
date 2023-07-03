@@ -8,13 +8,13 @@ data class Corpses(@Id
                    @GeneratedValue(strategy = GenerationType.IDENTITY)
                    val id: Long?,
 
-                   @Column(unique = true, nullable = false)
+                   @Column(unique = true, nullable = true)
                    val name: String?,
 
-                   @Column(unique = true)
+                   @Column(unique = true, nullable = true)
                    val bi: String?,
 
-                   @Column(columnDefinition = "DATE NOT NULL")
+                   @Column(columnDefinition = "DATE")
                    val birthDate: String?,
 
                    @Column(columnDefinition = "DATE NOT NULL")
@@ -22,4 +22,4 @@ data class Corpses(@Id
 
                    @ManyToOne
                    @JoinColumn(name = "relatoryId", referencedColumnName = "id")
-                   val relatoryId: Relatories)
+                   val relatoryId: Relatories?)

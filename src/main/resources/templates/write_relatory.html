@@ -8,5 +8,64 @@
     <div th:insert="register_employee :: alertFlags"></div>
     <div th:insert="dashboard :: dashboardMenu"></div>
     <h1>Write new relatory</h1>
+
+    <form
+        th:action="@{/dashboard/write_relatory}"
+        method = "post"
+    >
+        <input
+            th:field="${newCorpse.name}"
+            placeholder="Name"
+        />
+        <br/>
+        <input
+            th:field="${newCorpse.bi}"
+            placeholder="BI"
+            minlength="14"
+            maxlength="14"
+        />
+        <br/>
+        <label th:for="${newCorpse.birthDate}">Birth Date</label>
+        <input
+            th:field="${newCorpse.birthDate}"
+            type="date"
+        />
+        <br/>
+        <label th:for="${newCorpse.deceaseDate}">Decease Date</label>
+        <input
+            th:field="${newCorpse.deceaseDate}"
+            type="date"
+            required
+        />
+        <br/>
+        <input
+            th:field="${newRelatory.title}"
+            placeholder="Relatory title"
+            required
+        />
+        <br/>
+        <textarea
+            th:field="${newRelatory.content}"
+            placeholder="Relatory content"
+            required
+        />
+        <br/>
+        <img th:src="@{'data:image/png;base64,' + ${captchaWrapper.captchaImage}}" alt="Captcha"/>
+        <br/>
+        <input
+                th:field="${captchaWrapper.userCaptchaAnswer}"
+                required
+                placeholder="Insert captcha answer"
+        />
+        <br/><br/>
+        <input
+                type="submit"
+                value="Confirm"
+        />
+        <input
+                type="reset"
+                value="Clear"
+        />
+    </form>
 </body>
 </html>

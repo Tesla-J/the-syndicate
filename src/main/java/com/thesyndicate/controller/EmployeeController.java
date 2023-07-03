@@ -1,6 +1,7 @@
 package com.thesyndicate.controller;
 
 import com.thesyndicate.entity.Employee;
+import com.thesyndicate.entity.User;
 import com.thesyndicate.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,5 +32,14 @@ public class EmployeeController {
 
     public void save(Employee e){
         repository.save(e);
+    }
+
+    public Employee findByUserId(User userId){
+        try{
+            return repository.findByUserId(userId);
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 }
