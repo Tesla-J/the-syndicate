@@ -5,15 +5,17 @@
     <title>Dashboard</title>
 </head>
 <body>
-  <h1>Dashboard</h1>
-  <a th:href="@{/home}">
-      <img src="" alt="Logo"/>
-  </a>
-  <div th:object="${user}">
-      <p th:text="*{username}"></p>
-  </div>
-  <a th:if="${user.username.equals('root')}" th:href="@{/dashboard/register_employee}">Register employee</a>
-  <br/>
-  <a th:href="@{/dashboard/logout}">Logout</a>
+    <div th:fragment="dashboardMenu">
+      <a th:href="@{/home}">
+          <img src="" alt="Logo"/>
+      </a>
+      <h1>Dashboard</h1>
+      <div th:object="${user}">
+          <p th:text="*{username}"></p>
+      </div>
+      <a th:if="${user.username.equals('root')}" th:href="@{/dashboard/register_employee}">Register employee</a>
+      <br/>
+      <a th:href="@{/dashboard/logout}">Logout</a>
+    </div>
 </body>
 </html>
