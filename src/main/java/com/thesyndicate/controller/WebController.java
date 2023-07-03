@@ -56,6 +56,8 @@ public class WebController {
 	private WalletController walletController;
 	@Autowired
 	private TransactionController transactionController;
+	@Autowired
+	private ProductController productController;
 	private final CaptchaWrapper captchaWrapper; //maiusculate
 
 	public WebController(){
