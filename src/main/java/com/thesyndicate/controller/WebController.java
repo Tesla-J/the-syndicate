@@ -232,6 +232,7 @@ public class WebController {
 		if(user == null || !user.getUsername().equals("root"))
 			return "redirect:/login";
 
+		model.addAttribute("user", user);
 		// set flags and messages
 		model.addAttribute(ERROR_FLAG, this.errorFlag);
 		model.addAttribute(ERROR_MESSAGE, this.errorMessage);
@@ -288,5 +289,25 @@ public class WebController {
 
 		setSuccessMessage("Employee successfully registered");
 		return "redirect:/dashboard/register_employee";
+	}
+
+	@GetMapping(value = "/dashboard/write_relatory")
+	public String writeRelatory(Model model, HttpSession httpSession){
+		User user = (User) httpSession.getAttribute("user");
+		if(user == null || !user.isEmployee())
+			return "redirect:/dashboard";
+
+		model.addAttribute("user", user);
+		//add employee info if is an employee TODO
+
+		resetFlags();
+		return "write_relatory";
+	}
+
+	@PostMapping(value = "/dashboard/write_reatory")
+	public String writeRelatory(Model model){
+
+		setSuccessMessage("Relatory successfully submitted");
+		return "redirect:/dashboard/write_relatory";
 	}
 }

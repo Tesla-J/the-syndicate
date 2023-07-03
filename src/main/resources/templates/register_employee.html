@@ -5,8 +5,11 @@
     <title>Register Employee</title>
 </head>
 <body>
-  <p th:if="${ERROR_FLAG}" th:text="${ERROR_MESSAGE}" style="color: #ff0000"></p>
-  <p th:if="${SUCCESS_FLAG}" th:text="${SUCCESS_MESSAGE}" style="color: #00ff00"></p>
+  <div th:insert="dashboard :: dashboardMenu"></div>
+  <div th:fragment="alertFlags">
+    <p th:if="${ERROR_FLAG}" th:text="${ERROR_MESSAGE}" style="color: #ff0000"></p>
+    <p th:if="${SUCCESS_FLAG}" th:text="${SUCCESS_MESSAGE}" style="color: #00ff00"></p>
+  </div>
   <h1>Register employee</h1>
   <form
     method = "post"
