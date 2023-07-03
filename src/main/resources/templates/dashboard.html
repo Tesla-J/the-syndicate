@@ -12,7 +12,8 @@
   <div th:object="${user}">
       <p th:text="*{username}"></p>
   </div>
-  <a th:href="@{/dashboard/logout}">Logout</a>
   <a th:if="${user.username.equals('root')}" th:href="@{/dashboard/register_employee}">Register employee</a>
+  <br/>
+  <a th:href="@{/dashboard/logout}">Logout</a>
 </body>
 </html>
