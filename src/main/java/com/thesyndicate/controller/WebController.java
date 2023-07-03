@@ -54,6 +54,8 @@ public class WebController {
 	private CorpseController corpseController;
 	@Autowired
 	private WalletController walletController;
+	@Autowired
+	private TransactionController transactionController;
 	private final CaptchaWrapper captchaWrapper; //maiusculate
 
 	public WebController(){
@@ -225,6 +227,8 @@ public class WebController {
 
 		var newUser = new User(null, username, UserKt.encryptPassword(pass), false);
 		userController.save(newUser);
+		var newWallet = new Wallet(null, WalletKt.generateHash(), 0.0D, newUser);
+		walletController.save(newWallet);
 
 		return "redirect:/login?" + SIGNUP_SUCCESS_PARAM + "=true";
 	}

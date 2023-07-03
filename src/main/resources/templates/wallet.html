@@ -7,5 +7,8 @@
 <body>
     <div th:insert="~{dashboard :: dashboardMenu}"></div>
     <h1>Wallet</h1>
+    <div th:object="${wallet}">
+        <p th:text="|Balance: *{balance} BTC|"></p>
+    </div>
 </body>
 </html>
