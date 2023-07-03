@@ -2,12 +2,14 @@ package com.thesyndicate.controller;
 
 import java.util.Objects;
 
+import com.thesyndicate.entity.Employee;
 import com.thesyndicate.entity.User;
 import com.thesyndicate.entity.UserKt;
 import com.thesyndicate.util.CaptchaWrapperKt;
 
 import com.thesyndicate.util.CaptchaWrapper;
 import jakarta.servlet.http.HttpSession;
+import kotlin.text.UStringsKt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class WebController {
+	private final String DEFAULT_PASSWORD = "123";
 	private final String LOGIN_ERROR = "LOGIN_ERROR";
 	private final String LOGIN_ERROR_PARAM = "login_error";
 	private final String CAPTCHA_ERROR = "CAPTCHA_ERROR";
@@ -33,12 +36,54 @@ public class WebController {
 	private final String PASSWORD_MISMATCH_ERROR = "PASSWORD_MISMATCH_ERROR";
 	private final String PASSWORD_MISMATCH_ERROR_PARAM = "password_mismach";
 
+	// flags
+	private final String ERROR_FLAG = "ERROR_FLAG";
+	private final String SUCCESS_FLAG = "SUCCESS_FLAG";
+	private final String SUCCESS_MESSAGE = "SUCCESS_MESSAGE";
+	private final String ERROR_MESSAGE = "ERROR_MESSAGE";
+	private Boolean errorFlag = false;
+	private Boolean successFlag = false;
+	private String errorMessage;
+	private String successMessage;
+
 	@Autowired
 	private UserController userController;
-	private final CaptchaWrapper captchaWrapper;
+	@Autowired
+	private EmployeeController employeeController;
+	private final CaptchaWrapper captchaWrapper; //maiusculate
 
 	public WebController(){
 		this.captchaWrapper = new CaptchaWrapper();
+	}
+
+	// flags manager
+
+	/**
+	 * reset the error and success flags and their respective messages
+	 */
+	private void resetFlags(){
+		this.errorFlag = false;
+		this.errorMessage = "";
+		this.successFlag = false;
+		this.successMessage = "";
+	}
+
+	/**
+	 * sets the error flag to true and a custom error message
+	 * @param errorMessage custom error message
+	 */
+	private void setErrorMessage(String errorMessage){
+		this.errorFlag = true;
+		this.errorMessage = errorMessage;
+	}
+
+	/**
+	 * set's the success flag to true and a custom success message
+	 * @param successMessage custom success message
+	 */
+	private void setSuccessMessage(String successMessage){
+		this.successFlag = true;
+		this.successMessage = successMessage;
 	}
 
 	/**
@@ -107,11 +152,9 @@ public class WebController {
 			var user = userController.authenticate(username, password);
 			//System.err.println(UserKt.encryptPassword("root"));
 			if (Objects.isNull(user)) {
-				System.out.println("Login failed");
 				suffix.append("?" + LOGIN_ERROR_PARAM + "=true");//model.addAttribute(LOGIN_ERROR, true);
 			}
 			else {
-				System.out.println("Welcome"); //log
 				suffix.append("?loginSuccess=true");
 				model.addAttribute(LOGIN_SUCCESS, true);
 
@@ -183,19 +226,67 @@ public class WebController {
 	}
 
 	@GetMapping(value = "/dashboard/register_employee")
-	public String registerEmployee(Model model, HttpSession httpSession){
+	public String registerEmployee(Model model,
+								   HttpSession httpSession){
 		User user = (User) httpSession.getAttribute("user");
 		if(user == null || !user.getUsername().equals("root"))
 			return "redirect:/login";
 
-		model.addAttribute("users", userController.getAll());
+		// set flags and messages
+		model.addAttribute(ERROR_FLAG, this.errorFlag);
+		model.addAttribute(ERROR_MESSAGE, this.errorMessage);
+		model.addAttribute(SUCCESS_FLAG, this.successFlag);
+		model.addAttribute(SUCCESS_MESSAGE, this.successMessage);
+
+		var newEmployee = new Employee();
+		model.addAttribute("newEmployee", newEmployee);
 		model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+
+		// reset flags and messages
+		resetFlags();
 
 		return "register_employee";
 	}
 
 	@PostMapping(value = "/dashboard/register_employee")
-	public String registerEmployee(Model model){
+	public String registerEmployee(Model model,
+								   @ModelAttribute("newEmployee") Employee tmpEmployee,
+								   @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper,
+								   @RequestParam String username){
+
+		if(!CaptchaWrapperKt.verifyCaptcha(this.captchaWrapper.getCaptchaInstance(), captchaWrapper.getUserCaptchaAnswer())){
+			setErrorMessage("Wrong captcha answer");
+			return "redirect:/dashboard/register_employee";
+		}
+		else if(this.userController.exists(username)){
+			setErrorMessage("Username already taken");
+			return "redirect:/dashboard/register_employee";
+		}
+		else if(employeeController.exists(tmpEmployee.getName())){
+			setErrorMessage("Employee name already registered");
+			return "redirect:/dashboard/register_employee";
+		}
+		else if(employeeController.exists(tmpEmployee.getBi())){
+			setErrorMessage("Employee BI already registered");
+			return "redirect:/dashboard/register_employee";
+		}
+		else if(employeeController.exists(tmpEmployee.getPhoneNumber())){
+			setErrorMessage("Employee phone number already registered");
+			return "redirect:/dashboard/register_employee";
+		}
+
+		// registering employee
+		var newUser = new User(null, username, UserKt.encryptPassword(DEFAULT_PASSWORD), true);
+		userController.save(newUser);
+		var newEmployee = new Employee(null,
+				tmpEmployee.getName(),
+				tmpEmployee.getBi(),
+				tmpEmployee.getPhoneNumber(),
+				tmpEmployee.getEmail(),
+				tmpEmployee.getBirthDate(), newUser);
+		employeeController.save(newEmployee);
+
+		setSuccessMessage("Employee successfully registered");
 		return "redirect:/dashboard/register_employee";
 	}
 }

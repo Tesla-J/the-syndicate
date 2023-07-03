@@ -5,22 +5,22 @@
     <title>Register Employee</title>
 </head>
 <body>
+  <p th:if="${ERROR_FLAG}" th:text="${ERROR_MESSAGE}" style="color: #ff0000"></p>
+  <p th:if="${SUCCESS_FLAG}" th:text="${SUCCESS_MESSAGE}" style="color: #00ff00"></p>
   <h1>Register employee</h1>
   <form
     method = "post"
     th:action="@{/dashboard/register_employee}"
-    th:object="${captchaWrapper}"
+    th:object="${newEmployee}"
   >
     <input
-        name = "name"
-        id = "name"
+        th:field="*{name}"
         placeholder="Full name"
         required
     />
     <br/>
     <input
-        name = "bi"
-        id = "bi"
+        th:field="*{bi}"
         maxlength="14"
         minlength="14"
         placeholder="BI"
@@ -28,8 +28,7 @@
     />
     <br/>
     <input
-        name = "phoneNumber"
-        id = "phoneNumber"
+        th:field="*{phoneNumber}"
         type = "tel"
         minlength="9"
         maxlength="13"
@@ -38,59 +37,41 @@
     />
     <br/>
     <input
-        name = "email"
-        id = "email"
+        th:field="*{email}"
         type = "email"
         placeholder="E-mail"
         required
     />
     <br/>
-    <label for="birthDate">Birth Date</label>
+    <label th:for="${birthDate}">Birth Date</label>
     <input
-        name = "birthDate"
-        id = "birthDate"
+        th:field="*{birthDate}"
         type = "date"
         placeholder="Birth Date"
     />
     <br/>
     <input
-            id="username"
-            name="username"
-            placeholder="Username"
-            required
+        id="username"
+        name="username"
+        placeholder="Username"
+        required
     />
     <br/>
-    <input
-            id="pass"
-            name="pass"
-            placeholder="Password"
-            type="password"
-            required
-    />
+    <img th:src="@{'data:image/png;base64,' + ${captchaWrapper.captchaImage}}" alt="Captcha"/>
     <br/>
     <input
-            id="cpass"
-            name="cpass"
-            placeholder="Confirm password"
-            type="password"
-            required
-    />
-    <br/>
-    <img th:src="@{'data:image/png;base64,' + *{captchaImage}}" alt="Captcha"/>
-    <br/>
-    <input
-            th:field="*{userCaptchaAnswer}"
-            required
-            placeholder="Insert captcha answer"
+        th:field="${captchaWrapper.userCaptchaAnswer}"
+        required
+        placeholder="Insert captcha answer"
     />
     <br/><br/>
     <input
-            type="submit"
-            value="Confirm"
+        type="submit"
+        value="Confirm"
     />
     <input
-            type="reset"
-            value="Clear"
+        type="reset"
+        value="Clear"
     />
   </form>
 </body>

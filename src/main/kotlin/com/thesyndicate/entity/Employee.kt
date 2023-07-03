@@ -1,7 +1,6 @@
 package com.thesyndicate.entity
 
 import jakarta.persistence.*
-import java.time.LocalDate
 
 @Entity
 @Table(name = "Employees")
@@ -21,10 +20,10 @@ data class Employee(@Id
                     @Column(nullable = false, unique = true)
                     val email: String,
 
-                    @Column(nullable = false)
-                    val birthDate: LocalDate,
+                    @Column(nullable = false, columnDefinition = "DATE NOT NULL")
+                    val birthDate: String,
 
-                    @Column(unique = true)
+                    //@Column(unique = true, nullable = false) -> not allowed
                     @ManyToOne
                     @JoinColumn(name = "userId", referencedColumnName = "id")
                     val userId: User?)
