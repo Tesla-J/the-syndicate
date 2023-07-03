@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+</head>
+<body>
+    <div th:insert="dashboard :: dashboardMenu"></div>
+    <br/>
+    <div th:fragment="shopMenu">
+        <a th:href="@{/shop/add_product}">Add Product</a>
+        <br/>
+        <a th:href="@{/shop/my_store}">My Store</a>
+        <br/>
+        <a th:href="@{/shop/shop_history}">Shopping history</a>
+    </div>
+    <h1>Shop</h1>
+</body>
+</html>

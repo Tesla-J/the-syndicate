@@ -383,4 +383,93 @@ public class WebController {
 
 		return "redirect:/dashboard/wallet";
 	}
+
+	@GetMapping(value = "/shop")
+	public String shop(Model model, HttpSession httpSession){
+
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		//model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+
+		return "shop";
+	}
+
+	@PostMapping(value = "shop")
+	public String shop(Model model){
+		return "redirect:/shop";
+	}
+
+	@GetMapping(value = "/shop/add_product")
+	public String addProduct(Model model, HttpSession httpSession){
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		//model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+
+		return "add_product";
+	}
+
+	@PostMapping(value = "/shop/add_product")
+	public String addProduct(Model model){
+		return "redirect:/shop/add_product";
+	}
+
+	@GetMapping(value = "/shop/my_store")
+	public String myStore(Model model, HttpSession httpSession){
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		//model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+
+		return "my_store";
+	}
+
+	@PostMapping(value = "/shop/my_store")
+	public String myStore(Model model){
+		return "redirect:/shop/my_store";
+	}
+
+	@GetMapping(value = "/shop/shop_history")
+	public String shopHistory(Model model, HttpSession httpSession){
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		//model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+
+		return "shop_history";
+	}
+
+	@PostMapping(value = "/shop/shop_history")
+	public String shopHistory(Model model){
+		return "redirect:/shop/shop_history";
+	}
 }

@@ -19,6 +19,8 @@
       <br/>
       <a th:if="${!user.isEmployee}" th:href="@{/dashboard/wallet}">Wallet</a>
       <br/>
+      <a th:if="${!user.isEmployee}" th:href="@{/shop}">Shop</a>
+      <br/>
       <a th:href="@{/dashboard/logout}">Logout</a>
     </div>
 </body>
