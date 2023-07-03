@@ -52,6 +52,8 @@ public class WebController {
 	private RelatoryController relatoryController;
 	@Autowired
 	private CorpseController corpseController;
+	@Autowired
+	private WalletController walletController;
 	private final CaptchaWrapper captchaWrapper; //maiusculate
 
 	public WebController(){
@@ -350,5 +352,31 @@ public class WebController {
 
 		setSuccessMessage("Relatory successfully submitted");
 		return "redirect:/dashboard/write_relatory";
+	}
+
+	@GetMapping(value = "/dashboard/wallet")
+	public String wallet(Model model, HttpSession httpSession){
+
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+
+		return "wallet";
+	}
+
+	@PostMapping(value = "/dashboard/wallet")
+	public String wallet(Model model,
+						 HttpSession httpSession,
+						 @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper){
+
+		return "redirect:/dashboard/wallet";
 	}
 }
