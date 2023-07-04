@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="../static/css/style-dashboard.css">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
 <body>
-    <div th:fragment="dashboardMenu">
-      <a th:href="@{/home}">
-          <img src="" alt="Logo"/>
-      </a>
-      <h1>Dashboard</h1>
+    <div class="header">
+    <div class="dashboard">
+    <div th:fragment="dashboardMenu" class="image">
+      <a th:href="@{/home}"><img src="" alt="Logo" /></a>
+        <h2>Dashboard</h2>
       <div th:object="${user}">
           <p th:text="*{username}"></p>
       </div>
-      <a th:if="${user.username.equals('root')}" th:href="@{/dashboard/register_employee}">Register employee</a>
-      <br/>
-        <a th:if="${user.isEmployee}" th:href="@{/dashboard/write_relatory}">Write new relatory</a>
-        <br/>
+    </div>
+    </div>
+    <div class="func">
+      <a th:if="${user.username.equals('root')}" th:href="@{/dashboard/register_employee}">Register Employee</a>
+        <a th:if="${user.isEmployee}" th:href="@{/dashboard/write_relatory}">Write new Relatory</a>
       <a th:href="@{/dashboard/logout}">Logout</a>
+    </div>
+    </div>
+    </div>
+    <!--<div class="content">
+    </div>-->
+    <div class="cards">
+        <div class="card">
+            kklnsllkn
+            sjknkjnjnkjnj
+            skbkjsdjkfbdkjf
+        </div>
+        <div class="card">
+            kklnsllkn
+            sjknkjnjnkjnj
+            skbkjsdjkfbdkjf
+        </div>
     </div>
 </body>
 </html>
