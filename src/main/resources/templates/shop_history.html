@@ -7,12 +7,31 @@
 </head>
 <body>
     <div class="header">
-        <h2>Shopping history</h2>
-    <div th:insert="shop :: shopMenu"></div>
-    <div th:insert="add_product :: returnToDashboard"></div>
+      <div th:insert="shop :: shopMenu"></div>
+      <div th:insert="add_product :: returnToDashboard"></div>
     </div>
-    <div th:insert="shop :: shopMenu"></div>
-    <div th:insert="add_product :: returnToDashboard"></div>
-  </div>
+    <h1>Shopping history</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Origin wallet</th>
+                <th>Destination wallet</th>
+                <th>Transacted amount</th>
+                <th>Transaction date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <th th:text="${transaction.id}"></th>
+                <th th:text="${transaction.description}"></th>
+                <th th:text="${transaction.idOriginWallet.address}"></th>
+                <th th:text="${transaction.idDestinationWallet.address}"></th>
+                <th th:text="${transaction.amount}"></th>
+                <th th:text="${transaction.date}"></th>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

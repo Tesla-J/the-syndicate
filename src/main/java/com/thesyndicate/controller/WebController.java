@@ -1,11 +1,14 @@
 package com.thesyndicate.controller;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 import com.thesyndicate.entity.*;
 import com.thesyndicate.util.CaptchaWrapperKt;
 
 import com.thesyndicate.util.CaptchaWrapper;
+import com.thesyndicate.util.FormatedDateKt;
+import com.thesyndicate.util.Transactable;
 import jakarta.servlet.http.HttpSession;
 import kotlin.text.UStringsKt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -407,7 +410,37 @@ public class WebController {
 	}
 
 	@PostMapping(value = "/shop")
-	public String shop(Model model){
+	public String shop(Model model,
+					   HttpSession httpSession,
+					   @RequestParam Long productId){
+
+		Transactable transactable = (w1,w2,b,d)->{
+			// transact between two wallets
+			var cw1 = w1.copy(w1.getId(), w1.getAddress(), w1.getBalance() - b, w1.getOwner());
+			var cw2 = w2.copy(w2.getId(), w2.getAddress(), w2.getBalance() + b, w2.getOwner());
+			walletController.save(cw1);
+			walletController.save(cw2);
+			var t = new Transaction(null,cw1, cw2, b, d, FormatedDateKt.format(LocalDate.now()));
+			transactionController.save(t);
+		};
+
+		var user = (User) httpSession.getAttribute("user");
+		var clientWallet = walletController.findByOwner(user);
+		var product = productController.findById(productId);
+		var sellerWallet = walletController.findByOwner(product.getIdSeller());
+
+		if(clientWallet.getBalance() < product.getPrice()){
+			setErrorMessage("You don't have enough money to purchase this item");
+			return "redirect:/shop";
+		}
+		else if(user.getId() == sellerWallet.getOwner().getId()){
+			setErrorMessage("You cannot buy from yourself, that's dumb!");
+			return "redirect:/shop";
+		}
+
+		transactable.transact(clientWallet, sellerWallet, product.getPrice(), "Purchase " + product.getName());
+		setSuccessMessage(product.getName() + " purchased");
+
 		return "redirect:/shop";
 	}
 
@@ -486,6 +519,7 @@ public class WebController {
 		model.addAttribute("user", user);
 		var wallet = walletController.findByOwner(user);
 		model.addAttribute("wallet", wallet);
+		model.addAttribute("transactions", transactionController.findByWallet(wallet));
 
 		return "shop_history";
 	}

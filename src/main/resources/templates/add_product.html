@@ -26,6 +26,7 @@
                 th:field="*{stock}"
                 placeholder="Quantity in stock"
                 type="number"
+                min="1"
                 required
         />
         <select th:field="*{category}" required>
@@ -38,7 +39,8 @@
                 th:field="*{price}"
                 placeholder="Price"
                 type="number"
-                min="0.1"
+                min="0.0001"
+                max="100.0"
                 required
         />
         <textarea
