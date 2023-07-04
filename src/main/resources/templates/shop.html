@@ -15,6 +15,7 @@
         <a th:href="@{/shop/shop_history}">Shopping history</a>
     </div>
     <h1>Shop</h1>
+    <div th:insert="~{register_employee :: alertFlags}"></div>
     <form th:each="product : ${products}" th:object="${product}" style="border: solid" method="post" th:action="@{/shop}">
         <br/>
         <h2 th:text="*{name}"></h2>

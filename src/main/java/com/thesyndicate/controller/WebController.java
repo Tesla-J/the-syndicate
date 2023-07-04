@@ -429,7 +429,17 @@ public class WebController {
 		var product = productController.findById(productId);
 		var sellerWallet = walletController.findByOwner(product.getIdSeller());
 
+		if(clientWallet.getBalance() < product.getPrice()){
+			setErrorMessage("You don't have enough money to purchase this item");
+			return "redirect:/shop";
+		}
+		else if(user.getId() == sellerWallet.getOwner().getId()){
+			setErrorMessage("You cannot buy from yourself, that's dumb!");
+			return "redirect:/shop";
+		}
+
 		transactable.transact(clientWallet, sellerWallet, product.getPrice(), "Purchase " + product.getName());
+		setSuccessMessage(product.getName() + " purchased");
 
 		return "redirect:/shop";
 	}
@@ -509,6 +519,7 @@ public class WebController {
 		model.addAttribute("user", user);
 		var wallet = walletController.findByOwner(user);
 		model.addAttribute("wallet", wallet);
+		model.addAttribute("transactions", transactionController.findByWallet(wallet));
 
 		return "shop_history";
 	}
