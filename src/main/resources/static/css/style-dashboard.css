@@ -1,0 +1,64 @@
+:root{
+  --header: rgb(110, 0, 150);;
+  --white: white;
+  --dark: black;
+  --blue: blue;
+}
+*{
+  margin: 0;
+  padding:0;
+}
+ body {
+    font-family: sans-serif;
+}
+
+.image{
+  width: 100px;
+}
+.header, .func{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.header{
+  background-color: var(--header);
+  box-shadow: 1px 1px 4px var(--dark);
+  height: 56px;
+  justify-content: space-between;
+  padding: 0 10px;
+  position: relative;
+ }
+.func{
+  gap: 1em;
+  color: var(--dark);
+  transition: 1s;
+  font.weight: bold;
+}
+a:hover{
+  background-color: var(--blue);
+}
+.active{
+  background-color: var(--dark);
+  padding: 10px;
+  border-radius: 10px;
+ }
+
+.content{
+  text-align: center;
+  padding-top: 5em;
+  height: 100vh;
+  transition: 1s;
+}
+cards{
+   justify-content: space-between;
+   align-items: center;
+}
+.card{
+    display: inline-block;
+    width: 30%;
+    padding: 20px;
+    margin: 1px;
+    border: 1px solid blue;
+}
+
+

@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{css/style-register-user.css}">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <head>
 <meta charset="UTF-8">
 <title>User sign up</title>
 </head>
 <body>
+  <div class="container" class="user-box">
+    <div class="box-register">
 	<p th:if="${SIGNUP_ERROR}" style="color: #ff0000">Could not complete operation, username already taken</p>
     <p th:if="${CAPTCHA_ERROR}" style="color: #ff0000">Wrong captcha answer</p>
     <p th:if="${PASSWORD_MISMATCH_ERROR}" style="color: #ff0000">Passwords don't match</p>
     <br/>
-    <h1>Sign up</h1>
+    <h2>Sign up</h2>
     <form th:action="@{/register_user}"
           th:object="${captchaWrapper}"
           method="post"
@@ -46,13 +51,15 @@
         />
         <br/><br/>
         <input
+                type="reset"
+                value="Clear"
+        />
+        <input
             type="submit"
             value="Confirm"
         />
-        <input
-            type="reset"
-            value="Clear"
-        />
     </form>
+        </div>
+  </div>
 </body>
 </html>

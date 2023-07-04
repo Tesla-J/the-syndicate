@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{css/style-index.css}">
 <head>
 <meta charset="UTF-8">
 <title>Index - The Syndicate</title>
 </head>
 <body>
+	<div class="header">
 	<h1>The syndicate</h1>
-	<a th:if="${user != null}" th:href="@{/dashboard}">dashboard</a>
-	<a th:if="${user == null}" href="login">Login</a>
+	<a th:if="${user != null}" th:href="@{/dashboard}">Dashboard</a>
+	</div>
+	 <div class="info">
+		 Welcome to the other side, the most <br />dedicated union in the world
+	 </div>
+	<div class="info2">Here you find what you want</div>
+	<div class="button">
+	<a th:if="${user == null}" th:href="@{/login}" class="login">Login</a>
+	</div>
 </body>
 </html>

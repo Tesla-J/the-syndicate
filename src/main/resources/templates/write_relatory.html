@@ -1,71 +1,107 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="@{css/style-relatory.css}">
 <head>
     <meta charset="UTF-8">
     <title>Write new relatory</title>
 </head>
 <body>
+    <div class="container">
     <div th:insert="register_employee :: alertFlags"></div>
     <div th:insert="dashboard :: dashboardMenu"></div>
-    <h1>Write new relatory</h1>
-
+    <div class="text">Write new relatory</div>
     <form
         th:action="@{/dashboard/write_relatory}"
         method = "post"
     >
-        <input
-            th:field="${newCorpse.name}"
-            placeholder="Name"
-        />
-        <br/>
-        <input
-            th:field="${newCorpse.bi}"
-            placeholder="BI"
-            minlength="14"
-            maxlength="14"
-        />
-        <br/>
-        <label th:for="${newCorpse.birthDate}">Birth Date</label>
-        <input
-            th:field="${newCorpse.birthDate}"
-            type="date"
-        />
-        <br/>
-        <label th:for="${newCorpse.deceaseDate}">Decease Date</label>
-        <input
-            th:field="${newCorpse.deceaseDate}"
-            type="date"
-            required
-        />
-        <br/>
-        <input
-            th:field="${newRelatory.title}"
-            placeholder="Relatory title"
-            required
-        />
-        <br/>
-        <textarea
-            th:field="${newRelatory.content}"
-            placeholder="Relatory content"
-            required
-        />
-        <br/>
-        <img th:src="@{'data:image/png;base64,' + ${captchaWrapper.captchaImage}}" alt="Captcha"/>
-        <br/>
-        <input
-                th:field="${captchaWrapper.userCaptchaAnswer}"
-                required
-                placeholder="Insert captcha answer"
-        />
-        <br/><br/>
-        <input
-                type="submit"
-                value="Confirm"
-        />
-        <input
-                type="reset"
-                value="Clear"
-        />
+        <div class="form-row">
+            <div class="input-data">
+                <input
+                        th:field="${newCorpse.name}"
+                        placeholder=""
+                />
+            <div class="underline"></div>
+             <label for=>Name</label>
+            </div>
+           <div class="input-data">
+               <input
+                       th:field="${newCorpse.bi}"
+                       placeholder=""
+                       minlength="14"
+                       maxlength="14"
+               />
+               <div class="underline"></div>
+               <label for=>B.I</label>
+           </div>
+        </div>
+
+        <div class="form-row">
+        <div class="input-data">
+            <label th:for="${newCorpse.birthDate}">Birth Date</label>
+            <br />
+            <input
+                    th:field="${newCorpse.birthDate}"
+                    type="date"
+            />
+            <br />
+        </div>
+        <div class="input-data">
+            <label th:for="${newCorpse.deceaseDate}">Decease Date</label>
+            <br />
+            <input
+                    th:field="${newCorpse.deceaseDate}"
+                    type="date"
+                    required
+            />
+        </div>
+    </div>
+        <div class="form-row">
+            <div class="input-data">
+                <br />
+                <input
+                        th:field="${newRelatory.title}"
+                        placeholder=""
+                        required
+                />
+                <label>
+                    Relatory Title
+                </label>
+            </div>
+            <div class="input-data">
+                <img th:src="@{'data:image/png;base64,' + ${captchaWrapper.captchaImage}}" alt="Captcha"/>
+                <br/>
+                <input
+                        th:field="${captchaWrapper.userCaptchaAnswer}"
+                        required
+                        placeholder="Insert captcha answer"
+                />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-data textarea">
+                <textarea
+                        th:field="${newRelatory.content}"
+                        placeholder="Relatory content"
+                        required
+                />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-data">
+                <input
+                        type="submit"
+                        value="Confirm"
+                />
+                <input
+                        type="reset"
+                        value="Clear"
+                />
+            </div>
+        </div>
+
     </form>
+    </div>
 </body>
 </html>
