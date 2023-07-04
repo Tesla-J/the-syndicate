@@ -10,22 +10,7 @@
     <div th:insert="dashboard :: dashboardMenu"></div>
     <div th:fragment="shopMenu" class="shopMenu">
         <a th:href="@{/shop/add_product}">Add Product</a>
-        <a th:href="@{/shop/my_store}">My Store</a>
-        <a th:href="@{/shop/shop_history}">Shopping history</a>
-    </div>
-    <div th:each="product : ${products}" th:object="${product}" style="border: solid" class="table">
-        <br/>
-        <h2 th:text="*{name}"></h2>
-        <p th:text="*{description}"></p>
-        <h3 th:text="*{price}"></h3>
-        <p th:text="|Seller: *{idSeller.username}|"></p>
-        <br/>
-    </div>
-    <h1>Shop</h1>
-    <div th:insert="dashboard :: dashboardMenu"></div>
-    <div th:fragment="shopMenu">
-        <a th:href="@{/shop/add_product}">Add Product</a>
-        <a th:href="@{/shop/my_store}">My Store</a>
+        <!--<a th:href="@{/shop/my_store}">My Store</a>-->
         <a th:href="@{/shop/shop_history}">Shopping history</a>
     </div>
     <h1>Shop</h1>

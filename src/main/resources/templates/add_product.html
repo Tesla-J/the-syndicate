@@ -15,7 +15,6 @@
          </div>
     <div th:insert="~{register_employee :: alertFlags}"></div>
     <br>
-    <div th:insert="~{shop :: shopMenu}"></div>
     <form th:object="${newProduct}" th:action="@{/shop/add_product}" method="post">
         <input
             th:field="*{name}"
