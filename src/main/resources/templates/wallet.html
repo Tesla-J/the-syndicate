@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Wallet</title>
+</head>
+<body>
+    <div th:insert="~{dashboard :: dashboardMenu}"></div>
+    <h1>Wallet</h1>
+    <div th:object="${wallet}">
+        <p th:text="|Balance: *{balance} BTC|"></p>
+    </div>
+</body>
+</html>

@@ -65,4 +65,8 @@ public class UserController {
 	public void save(User newUser){
 		repository.save(newUser);
 	}
+
+	public User findById(long id){
+		return repository.findById(id).get();
+	}
 }

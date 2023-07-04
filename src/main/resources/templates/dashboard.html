@@ -17,8 +17,14 @@
     </div>
     </div>
     <div class="func">
-      <a th:if="${user.username.equals('root')}" th:href="@{/dashboard/register_employee}">Register Employee</a>
-        <a th:if="${user.isEmployee}" th:href="@{/dashboard/write_relatory}">Write new Relatory</a>
+      <a th:if="${user.username.equals('root')}" th:href="@{/dashboard/register_employee}">Register employee</a>
+      <br/>
+      <a th:if="${user.isEmployee}" th:href="@{/dashboard/write_relatory}">Write new relatory</a>
+      <br/>
+      <a th:if="${!user.isEmployee}" th:href="@{/dashboard/wallet}">Wallet</a>
+      <br/>
+      <a th:if="${!user.isEmployee}" th:href="@{/shop}">Shop</a>
+      <br/>
       <a th:href="@{/dashboard/logout}">Logout</a>
     </div>
     </div>
