@@ -242,7 +242,11 @@ public class WebController {
 	public String dashboard(Model model, HttpSession httpSession){
 		if(httpSession.getAttribute("user") == null) return "redirect:/login";
 
-		model.addAttribute("user", httpSession.getAttribute("user"));
+		var user = (User) httpSession.getAttribute("user");
+		model.addAttribute("user", user);
+		model.addAttribute("users", userController.getAll());
+		model.addAttribute("wallets", walletController.findAll());
+		model.addAttribute("transactions", transactionController.findAll());
 
 		return "/dashboard";
 	}
@@ -377,6 +381,7 @@ public class WebController {
 		model.addAttribute("user", user);
 		var wallet = walletController.findByOwner(user);
 		model.addAttribute("wallet", wallet);
+		httpSession.setAttribute("wallet", wallet);
 
 		return "wallet";
 	}
@@ -384,7 +389,14 @@ public class WebController {
 	@PostMapping(value = "/dashboard/wallet")
 	public String wallet(Model model,
 						 HttpSession httpSession,
-						 @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper){
+						 @RequestParam Double funds){
+
+		var user = (User) httpSession.getAttribute("user");
+		var wallet = (Wallet) httpSession.getAttribute("wallet");
+		var newWallet = wallet.copy(wallet.getId(), wallet.getAddress(), wallet.getBalance() + funds, user);
+		walletController.save(newWallet);
+
+		setSuccessMessage("Deposit made successfully");
 
 		return "redirect:/dashboard/wallet";
 	}
