@@ -15,21 +15,37 @@ body {
 margin:0;
 padding:0;
 font-family: sans-serif;
---background: linear-gradient(rgb(75, 63, 248), #3a1c64);
- background: var(--dark);
+    background: linear-gradient(rgb(70, 60, 255), #3a1c64);
 }
 .header{
 background-color: var(--header);
 box-shadow: 1px 1px 4px var(--dark);
 height: 50px;
-justify-content: space-between;
-padding: 10px 0 0 100px;
+padding: 10px 10px 0px 30px;
 position: relative;
-display: flex;
 flex-direction: row;
 gap: 1em;
-font-size: 24px;
+font-size: 18px;
 color: var(--white);
 justify-content: space-between;
-text-align: center;
+}
+table{
+  position: absolute;
+        top: 26%;
+        left: 50%;
+        width: 350px;
+        padding: 30px;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 15px 25px rgba(0,0,0,.6);
+        border-radius: 7px;
+        background: rgba(0,0,0,.5);
+        color: white
+}
+thead{
+   margin: 0;
+   padding: 0px;
+}
+
+th{
+  padding: 20px;
 }
