@@ -19,6 +19,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  text-decoration: none;
+  color: white
 }
 .header{
   background-color: var(--header);

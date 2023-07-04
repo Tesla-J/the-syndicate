@@ -12,10 +12,9 @@
         <a th:href="@{/shop/add_product}">Add Product</a>
         <!--<a th:href="@{/shop/my_store}">My Store</a>-->
         <a th:href="@{/shop/shop_history}">Shopping history</a>
+        <div th:insert="~{register_employee :: alertFlags}"></div>
     </div>
-    <h1>Shop</h1>
-    <div th:insert="~{register_employee :: alertFlags}"></div>
-    <form th:each="product : ${products}" th:object="${product}" style="border: solid" method="post" th:action="@{/shop}">
+    <form th:each="product : ${products}" th:object="${product}" style="" method="post" th:action="@{/shop}">
         <br/>
         <h2 th:text="*{name}"></h2>
         <p th:text="*{description}"></p>
