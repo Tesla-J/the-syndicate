@@ -52,6 +52,12 @@ public class WebController {
 	private RelatoryController relatoryController;
 	@Autowired
 	private CorpseController corpseController;
+	@Autowired
+	private WalletController walletController;
+	@Autowired
+	private TransactionController transactionController;
+	@Autowired
+	private ProductController productController;
 	private final CaptchaWrapper captchaWrapper; //maiusculate
 
 	public WebController(){
@@ -223,6 +229,8 @@ public class WebController {
 
 		var newUser = new User(null, username, UserKt.encryptPassword(pass), false);
 		userController.save(newUser);
+		var newWallet = new Wallet(null, WalletKt.generateHash(), 0.0D, newUser);
+		walletController.save(newWallet);
 
 		return "redirect:/login?" + SIGNUP_SUCCESS_PARAM + "=true";
 	}
@@ -350,5 +358,140 @@ public class WebController {
 
 		setSuccessMessage("Relatory successfully submitted");
 		return "redirect:/dashboard/write_relatory";
+	}
+
+	@GetMapping(value = "/dashboard/wallet")
+	public String wallet(Model model, HttpSession httpSession){
+
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+
+		return "wallet";
+	}
+
+	@PostMapping(value = "/dashboard/wallet")
+	public String wallet(Model model,
+						 HttpSession httpSession,
+						 @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper){
+
+		return "redirect:/dashboard/wallet";
+	}
+
+	@GetMapping(value = "/shop")
+	public String shop(Model model, HttpSession httpSession){
+
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		//model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+		var products = productController.findAll();
+		model.addAttribute("products", products);
+
+		return "shop";
+	}
+
+	@PostMapping(value = "/shop")
+	public String shop(Model model){
+		return "redirect:/shop";
+	}
+
+	@GetMapping(value = "/shop/add_product")
+	public String addProduct(Model model, HttpSession httpSession){
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		//model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+		var newProduct = new Product();
+		model.addAttribute("newProduct", newProduct);
+		model.addAttribute("categories", ProductKt.getProductCategories());
+
+		return "add_product";
+	}
+
+	@PostMapping(value = "/shop/add_product")
+	public String addProduct(Model model,
+							 HttpSession httpSession,
+							 @ModelAttribute("newProduct") Product tmpProduct){
+		var seller = (User) httpSession.getAttribute("user");
+		System.err.println(seller);
+		var newProduct = new Product(null,
+									tmpProduct.getName(),
+									tmpProduct.getStock(),
+									seller,
+									tmpProduct.getCategory(),
+									tmpProduct.getPrice(),
+									tmpProduct.getDescription());
+		productController.save(newProduct);
+
+		setSuccessMessage("Product added successfully");
+
+		return "redirect:/shop/add_product";
+	}
+
+	@GetMapping(value = "/shop/my_store")
+	public String myStore(Model model, HttpSession httpSession){
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		//model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+
+		return "my_store";
+	}
+
+	@PostMapping(value = "/shop/my_store")
+	public String myStore(Model model){
+		return "redirect:/shop/my_store";
+	}
+
+	@GetMapping(value = "/shop/shop_history")
+	public String shopHistory(Model model, HttpSession httpSession){
+		var user = (User) httpSession.getAttribute("user");
+		if(user == null || user.isEmployee())
+			return "redirect:/dashboard";
+
+		setFlags(model);
+		resetFlags();
+
+		//model.addAttribute(CAPTCHA_WRAPPER, this.captchaWrapper);
+		model.addAttribute("user", user);
+		var wallet = walletController.findByOwner(user);
+		model.addAttribute("wallet", wallet);
+
+		return "shop_history";
+	}
+
+	@PostMapping(value = "/shop/shop_history")
+	public String shopHistory(Model model){
+		return "redirect:/shop/shop_history";
 	}
 }

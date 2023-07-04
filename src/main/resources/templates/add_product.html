@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" href="../static/css/style-product.css">
 <head>
     <meta charset="UTF-8">
     <title>Add product</title>
+    <link rel="stylesheet" href="../static/css/style-product.css">
 </head>
 <body>
     <div class="container">
@@ -16,5 +16,55 @@
     <div th:insert="register_employee :: alertFlags"></div>
      </div>
     <br>
+    <div th:insert="~{shop :: shopMenu}"></div>
+    <br/>
+    <div th:fragment="returnToDashboard">
+        <a th:href="@{/dashboard}">Dasboard</a>
+    </div>
+    <br/>
+    <h1>Add product</h1>
+    <div th:insert="~{register_employee :: alertFlags}"></div>
+    <br>
+    <form th:object="${newProduct}" th:action="@{/shop/add_product}" method="post">
+        <input
+            th:field="*{name}"
+            placeholder="Product name"
+            required
+        />
+        <br/>
+        <input
+                th:field="*{stock}"
+                placeholder="Quantity in stock"
+                type="number"
+                required
+        />
+        <br/>
+        <select th:field="*{category}" required>
+            <option th:each="category : ${categories}"
+                    th:value="${category}"
+                    th:text="${category}"
+            ></option>
+        </select>
+        <br/>
+        <input
+                th:field="*{price}"
+                placeholder="Price"
+                type="number"
+                min="0.1"
+                required
+        />
+        <br/>
+        <textarea
+                th:field="*{description}"
+                placeholder="Product description"
+                style="width: 500px; height: 800px"
+        ></textarea>
+        <br/>
+        <input th:value="|Seller: ${user.username}|" disabled/>
+        <br/>
+        <input type="submit" value="Submit"/>
+        <input type="reset" value="Clear"/>
+    </form>
+  </div>
 </body>
 </html>
