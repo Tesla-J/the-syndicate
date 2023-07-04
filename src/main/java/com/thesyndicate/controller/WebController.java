@@ -244,9 +244,18 @@ public class WebController {
 
 		var user = (User) httpSession.getAttribute("user");
 		model.addAttribute("user", user);
-		model.addAttribute("users", userController.getAll());
-		model.addAttribute("wallets", walletController.findAll());
-		model.addAttribute("transactions", transactionController.findAll());
+		var users = userController.getAll();
+		model.addAttribute("users", users);
+		var wallets = walletController.findAll();
+		model.addAttribute("wallets", wallets);
+		var transactions = transactionController.findAll();
+		model.addAttribute("transactions", transactions);
+
+
+		double totalFunds = wallets.stream().mapToDouble(Wallet::getBalance).sum();
+		double averageFunds = wallets.stream().mapToDouble(Wallet::getBalance).average().getAsDouble();
+		model.addAttribute("totalFunds", totalFunds);
+		model.addAttribute("averageFunds", averageFunds);
 
 		return "/dashboard";
 	}
