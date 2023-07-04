@@ -406,7 +406,7 @@ public class WebController {
 		return "shop";
 	}
 
-	@PostMapping(value = "shop")
+	@PostMapping(value = "/shop")
 	public String shop(Model model){
 		return "redirect:/shop";
 	}
@@ -424,12 +424,30 @@ public class WebController {
 		model.addAttribute("user", user);
 		var wallet = walletController.findByOwner(user);
 		model.addAttribute("wallet", wallet);
+		var newProduct = new Product();
+		model.addAttribute("newProduct", newProduct);
+		model.addAttribute("categories", ProductKt.getProductCategories());
 
 		return "add_product";
 	}
 
 	@PostMapping(value = "/shop/add_product")
-	public String addProduct(Model model){
+	public String addProduct(Model model,
+							 HttpSession httpSession,
+							 @ModelAttribute("newProduct") Product tmpProduct){
+		var seller = (User) httpSession.getAttribute("user");
+		System.err.println(seller);
+		var newProduct = new Product(null,
+									tmpProduct.getName(),
+									tmpProduct.getStock(),
+									seller,
+									tmpProduct.getCategory(),
+									tmpProduct.getPrice(),
+									tmpProduct.getDescription());
+		productController.save(newProduct);
+
+		setSuccessMessage("Product added successfully");
+
 		return "redirect:/shop/add_product";
 	}
 
