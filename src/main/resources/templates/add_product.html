@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add product</title>
-    <link rel="stylesheet" href="../static/css/style-product.css">
+    <link rel="stylesheet" th:href="@{css/style-product.css}">
 </head>
 <body>
     <div class="container">
@@ -13,7 +13,7 @@
              <a th:href="@{/dashboard}" class="button">Dashboard</a>
              <h2>Add product</h2>
          </div>
-    <div th:insert="register_employee :: alertFlags"></div>
+    <div th:insert="~{register_employee :: alertFlags}"></div>
     <br>
     <div th:insert="~{shop :: shopMenu}"></div>
     <form th:object="${newProduct}" th:action="@{/shop/add_product}" method="post">
