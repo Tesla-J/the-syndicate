@@ -2,11 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/style-shop-history.css">
+    <link rel="stylesheet" href="@{css/style-shop-history.css}">
     <title>Shopping history</title>
 </head>
 <body>
-    <div th:insert="shop :: shopMenu"></div>
-    <div th:insert="add_product :: returnToDashboard"></div>
+    <div class="header">
+      <div th:insert="shop :: shopMenu"></div>
+      <div th:insert="add_product :: returnToDashboard"></div>
+    </div>
     <h1>Shopping history</h1>
     <table>
         <thead>

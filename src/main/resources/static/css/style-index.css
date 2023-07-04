@@ -10,8 +10,9 @@
 }
  body {
     font-family: sans-serif;
-    background: var(--dark);
-    background-image: url("../static/img/2.png");
+    background: url("../img/3.jpg");
+    height: 100%;
+    witdh: 100%;
 }
 a{
   text-decoration: none;
