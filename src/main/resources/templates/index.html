@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" href="../static/css/style-index.css">
+<link rel="stylesheet" th:href="@{css/style-index.css}">
 <head>
 <meta charset="UTF-8">
 <title>Index - The Syndicate</title>
@@ -15,7 +15,7 @@
 	 </div>
 	<div class="info2">Here you find what you want</div>
 	<div class="button">
-	<a th:if="${user == null}" href="login" class="login">Login</a>
+	<a th:if="${user == null}" th:href="@{/login}" class="login">Login</a>
 	</div>
 </body>
 </html>
