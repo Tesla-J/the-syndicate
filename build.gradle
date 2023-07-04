@@ -37,6 +37,7 @@ dependencies {
 	implementation 'cn.apiclub.tool:simplecaptcha:1.2.2' //captcha
 	//implementation("com.github.penggle:kaptcha:2.3.2") // another captcha (interesting to implement)
 	implementation 'com.jhlabs:filters:2.0.235' //dependency for simple captcha dependency
+	developmentOnly("org.springframework.boot:spring-boot-devtools") //live load
 }
 
 sourceSets {

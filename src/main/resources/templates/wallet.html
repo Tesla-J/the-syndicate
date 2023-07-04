@@ -10,5 +10,8 @@
     <div th:object="${wallet}">
         <p th:text="|Balance: *{balance} BTC|"></p>
     </div>
+    <form th:action="@{/dashboard/wallet}" method="post">
+        <input name="funds" placeholder="Add funds to your wallet" type="number" min="0.0001"/><input type="submit" value="Submit"/>
+    </form>
 </body>
 </html>

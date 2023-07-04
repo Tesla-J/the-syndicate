@@ -242,7 +242,20 @@ public class WebController {
 	public String dashboard(Model model, HttpSession httpSession){
 		if(httpSession.getAttribute("user") == null) return "redirect:/login";
 
-		model.addAttribute("user", httpSession.getAttribute("user"));
+		var user = (User) httpSession.getAttribute("user");
+		model.addAttribute("user", user);
+		var users = userController.getAll();
+		model.addAttribute("users", users);
+		var wallets = walletController.findAll();
+		model.addAttribute("wallets", wallets);
+		var transactions = transactionController.findAll();
+		model.addAttribute("transactions", transactions);
+
+
+		double totalFunds = wallets.stream().mapToDouble(Wallet::getBalance).sum();
+		double averageFunds = wallets.stream().mapToDouble(Wallet::getBalance).average().getAsDouble();
+		model.addAttribute("totalFunds", totalFunds);
+		model.addAttribute("averageFunds", averageFunds);
 
 		return "/dashboard";
 	}
@@ -377,6 +390,7 @@ public class WebController {
 		model.addAttribute("user", user);
 		var wallet = walletController.findByOwner(user);
 		model.addAttribute("wallet", wallet);
+		httpSession.setAttribute("wallet", wallet);
 
 		return "wallet";
 	}
@@ -384,7 +398,14 @@ public class WebController {
 	@PostMapping(value = "/dashboard/wallet")
 	public String wallet(Model model,
 						 HttpSession httpSession,
-						 @ModelAttribute(CAPTCHA_WRAPPER) CaptchaWrapper captchaWrapper){
+						 @RequestParam Double funds){
+
+		var user = (User) httpSession.getAttribute("user");
+		var wallet = (Wallet) httpSession.getAttribute("wallet");
+		var newWallet = wallet.copy(wallet.getId(), wallet.getAddress(), wallet.getBalance() + funds, user);
+		walletController.save(newWallet);
+
+		setSuccessMessage("Deposit made successfully");
 
 		return "redirect:/dashboard/wallet";
 	}

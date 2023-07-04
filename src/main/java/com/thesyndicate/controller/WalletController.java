@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class WalletController {
     @Autowired
@@ -23,5 +25,9 @@ public class WalletController {
         catch(EmptyResultDataAccessException e){
             return null;
         }
+    }
+
+    public List<Wallet> findAll(){
+        return repository.findAll();
     }
 }
