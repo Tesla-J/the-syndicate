@@ -36,4 +36,13 @@ public class ProductController {
             return null;
         }
     }
+
+    public Product findById(long id){
+        try{
+            return repository.findById(id).get();
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
+    }
 }
