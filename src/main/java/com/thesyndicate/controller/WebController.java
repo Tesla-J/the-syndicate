@@ -400,6 +400,8 @@ public class WebController {
 		model.addAttribute("user", user);
 		var wallet = walletController.findByOwner(user);
 		model.addAttribute("wallet", wallet);
+		var products = productController.findAll();
+		model.addAttribute("products", products);
 
 		return "shop";
 	}

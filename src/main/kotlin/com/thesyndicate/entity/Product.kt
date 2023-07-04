@@ -8,4 +8,6 @@ data class Product(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) val i
                    val name : String,
                    val stock: Int,
                    @ManyToOne @JoinColumn(name = "idSeller", referencedColumnName = "id")val idSeller: User,
-                   val category: String)
+                   val category: String,
+                   @Column(nullable = false) val price : Double,
+                   @Column(columnDefinition = "TEXT NOT NULL DEFAULT 'NO DESCRIPTION'") val description: String)

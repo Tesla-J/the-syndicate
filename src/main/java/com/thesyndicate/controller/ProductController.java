@@ -27,4 +27,13 @@ public class ProductController {
             return null;
         }
     }
+
+    public List<Product> findAll(){
+        try{
+            return repository.findAll();
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
+    }
 }
