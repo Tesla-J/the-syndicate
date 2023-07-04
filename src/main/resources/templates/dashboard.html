@@ -31,7 +31,11 @@
     </div>
     </div>
 
+    <br/>
+    <br/>
     <div th:if="${user.username.equals('root')}">
+        <br/>
+        <br/>
         <p th:text="|Total users: ${users.size()}|"></p>
         <p th:text="|Total market customers and sellers: ${wallets.size()}|"></p>
         <p th:text="|Total Funds in the market: ${totalFunds} BTC|"></p>
