@@ -1,0 +1,33 @@
+:root{
+--header: rgb(110, 0, 150);;
+--white: white;
+--dark: black;
+--blue: blue;
+}
+*{
+margin: 0;
+padding:0;
+}
+html {
+height: 100%;
+}
+body {
+margin:0;
+padding:0;
+font-family: sans-serif;
+--background: linear-gradient(rgb(75, 63, 248), #3a1c64);
+ background: var(--dark);
+}
+.shopMenu{
+background-color: var(--header);
+box-shadow: 1px 1px 4px var(--dark);
+height: 30px;
+justify-content: space-between;
+padding: 10px 10px 10px 40px;
+position: relative;
+display: flex;
+gap: 1em;
+flex-direction: wrap;
+color: var(--white);
+text-align: center;
+}
